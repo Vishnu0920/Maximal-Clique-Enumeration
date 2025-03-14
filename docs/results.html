@@ -1,597 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Results - Maximal Clique Enumeration</title>
-  <link rel="stylesheet" href="assets/css/styles.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Results</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <header>
-    <nav class="navbar">
-      <div class="container">
-        <div class="logo">
-          <a href="index.html">Maximal Clique Enumeration</a>
-        </div>
-        <ul class="nav-links">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="algorithms.html">Algorithms</a></li>
-          <li><a href="datasets.html">Datasets</a></li>
-          <li><a href="results.html" class="active">Results</a></li>
-          <li><a href="code.html">Source Code</a></li>
-          <li><a href="report.html">Report</a></li>
-        </ul>
-        <div class="hamburger">
-          <span class="bar"></span>
-          <span class="bar"></span>
-          <span class="bar"></span>
-        </div>
-      </div>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="algorithms.html">Algorithms</a>
+        <a href="datasets.html">Datasets</a>
+        <a href="results.html">Results</a>
+        <a href="code.html">Source Code</a>
+        <a href="report.html">Report</a>
     </nav>
-  </header>
-
-  <main>
-    <section class="page-header">
-      <div class="container">
+    <header>
         <h1>Results</h1>
-        <p>Performance comparison of the three maximal clique enumeration algorithms across different datasets.</p>
-      </div>
+    </header>
+    <section>
+        <h2>Summary</h2>
+        <p>This project implements and compares three maximal clique enumeration algorithms on large-scale real-world networks. Our key findings include:</p>
+        <ul>
+            <li>Bron-Kerbosch Degeneracy showed the best overall performance</li>
+            <li>Arboricity-based approach had lowest memory consumption</li>
+            <li>CLIQUE algorithm struggled with large diameter networks</li>
+        </ul>
     </section>
 
-    <section class="runtime-comparison">
-      <div class="container">
-        <h2>Runtime Comparison</h2>
-        <p>The following table shows the runtime (in milliseconds) of each algorithm on the different datasets.</p>
-        
-        <div class="table-responsive">
-          <table class="results-table">
-            <thead>
-              <tr>
-                <th>Dataset</th>
-                <th>CLIQUE</th>
-                <th>Bron-Kerbosch Degeneracy</th>
-                <th>Arboricity-based</th>
-                <th>Fastest Algorithm</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Karate Club</td>
-                <td>12 ms</td>
-                <td>8 ms</td>
-                <td>10 ms</td>
-                <td>Bron-Kerbosch</td>
-              </tr>
-              <tr>
-                <td>Facebook Ego</td>
-                <td>3,250 ms</td>
-                <td>1,120 ms</td>
-                <td>1,850 ms</td>
-                <td>Bron-Kerbosch</td>
-              </tr>
-              <tr>
-                <td>Protein Interaction</td>
-                <td>850 ms</td>
-                <td>320 ms</td>
-                <td>280 ms</td>
-                <td>Arboricity</td>
-              </tr>
-              <tr>
-                <td>Web Graph</td>
-                <td>45,200 ms</td>
-                <td>12,800 ms</td>
-                <td>9,500 ms</td>
-                <td>Arboricity</td>
-              </tr>
-              <tr>
-                <td>Random-500-0.1</td>
-                <td>1,450 ms</td>
-                <td>620 ms</td>
-                <td>780 ms</td>
-                <td>Bron-Kerbosch</td>
-              </tr>
-              <tr>
-                <td>Random-500-0.5</td>
-                <td>28,500 ms</td>
-                <td>15,200 ms</td>
-                <td>18,700 ms</td>
-                <td>Bron-Kerbosch</td>
-              </tr>
-              <tr>
-                <td>Barabasi-1000</td>
-                <td>720 ms</td>
-                <td>310 ms</td>
-                <td>280 ms</td>
-                <td>Arboricity</td>
-              </tr>
-              <tr>
-                <td>Watts-Strogatz-1000</td>
-                <td>950 ms</td>
-                <td>480 ms</td>
-                <td>520 ms</td>
-                <td>Bron-Kerbosch</td>
-              </tr>
-            </tbody>
-          </table>
+    <section>
+        <h2>Runtime Comparison (milliseconds)</h2>
+        <div class="charts-container">
+            <div class="chart-card">
+                <canvas id="runtimeAS"></canvas>
+            </div>
+            <div class="chart-card">
+                <canvas id="runtimeWiki"></canvas>
+            </div>
+            <div class="chart-card">
+                <canvas id="runtimeEnron"></canvas>
+            </div>
         </div>
-      </div>
     </section>
 
-    <section class="chart-visualization">
-      <div class="container">
-        <h2>Runtime Visualization</h2>
-        <p>The following charts visualize the runtime performance of the three algorithms across different datasets.</p>
-        
-        <div class="chart-grid">
-          <div class="chart-container">
-            <h3>Small Datasets Runtime Comparison</h3>
-            <canvas id="smallDatasetChart"></canvas>
-          </div>
-          <div class="chart-container">
-            <h3>Large Datasets Runtime Comparison</h3>
-            <canvas id="largeDatasetChart"></canvas>
-          </div>
-          <div class="chart-container">
-            <h3>Runtime vs. Graph Density</h3>
-            <canvas id="densityChart"></canvas>
-          </div>
-          <div class="chart-container">
-            <h3>Runtime vs. Graph Size</h3>
-            <canvas id="sizeChart"></canvas>
-          </div>
+    <section>
+        <h2>Memory Usage (megabytes)</h2>
+        <div class="charts-container">
+            <div class="chart-card">
+                <canvas id="memoryAS"></canvas>
+            </div>
+            <div class="chart-card">
+                <canvas id="memoryWiki"></canvas>
+            </div>
+            <div class="chart-card">
+                <canvas id="memoryEnron"></canvas>
+            </div>
         </div>
-      </div>
     </section>
 
-    <section class="performance-analysis">
-      <div class="container">
-        <h2>Performance Analysis</h2>
-        
-        <div class="analysis-card">
-          <h3>Algorithm Performance by Graph Type</h3>
-          <div class="analysis-content">
-            <div class="analysis-text">
-              <h4>Sparse Graphs</h4>
-              <p>For sparse graphs (Web Graph, Protein Interaction, Barabasi-1000), the Arboricity-based algorithm generally outperforms the others. This is expected as the algorithm's time complexity is directly related to the graph's arboricity, which is low for sparse graphs.</p>
-              
-              <h4>Dense Graphs</h4>
-              <p>For denser graphs (Random-500-0.5), the Bron-Kerbosch algorithm with degeneracy ordering performs best. The degeneracy ordering helps reduce the search space significantly in these cases.</p>
-              
-              <h4>Small Graphs</h4>
-              <p>For very small graphs (Karate Club), all algorithms perform similarly, with slight advantages for the Bron-Kerbosch algorithm due to its efficient implementation and lower constant factors.</p>
-            </div>
-            <div class="analysis-chart">
-              <canvas id="graphTypeChart"></canvas>
-            </div>
-          </div>
-        </div>
-        
-        <div class="analysis-card">
-          <h3>Scalability Analysis</h3>
-          <div class="analysis-content">
-            <div class="analysis-text">
-              <p>As the graph size increases, the performance gap between the algorithms widens. The CLIQUE algorithm's performance degrades more rapidly with increasing graph size compared to the other two algorithms.</p>
-              
-              <p>The Bron-Kerbosch algorithm with degeneracy ordering and the Arboricity-based algorithm both show good scalability, with the Arboricity-based algorithm having a slight edge for very large sparse graphs.</p>
-            </div>
-            <div class="analysis-chart">
-              <canvas id="scalabilityChart"></canvas>
-            </div>
-          </div>
-        </div>
-        
-        <div class="analysis-card">
-          <h3>Memory Usage</h3>
-          <div class="analysis-content">
-            <div class="analysis-text">
-              <p>All three algorithms have similar space complexity (O(n + m)), but in practice, the Bron-Kerbosch algorithm with degeneracy ordering tends to use slightly more memory due to the additional data structures required for maintaining the degeneracy ordering.</p>
-              
-              <p>For very large graphs, memory usage becomes a critical factor, and the Arboricity-based algorithm shows the most efficient memory utilization.</p>
-            </div>
-            <div class="analysis-chart">
-              <canvas id="memoryChart"></canvas>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="key-findings">
-      <div class="container">
-        <h2>Key Findings</h2>
-        
-        <div class="findings-grid">
-          <div class="finding-card">
-            <div class="icon"><i class="fas fa-chart-line"></i></div>
-            <h3>Algorithm Selection</h3>
-            <p>For sparse graphs with low arboricity (e.g., planar graphs, scale-free networks), the Arboricity-based algorithm is the best choice.</p>
-          </div>
-          <div class="finding-card">
-            <div class="icon"><i class="fas fa-project-diagram"></i></div>
-            <h3>Degeneracy Advantage</h3>
-            <p>The Bron-Kerbosch algorithm with degeneracy ordering performs consistently well across different graph types and is a good general-purpose choice.</p>
-          </div>
-          <div class="finding-card">
-            <div class="icon"><i class="fas fa-tachometer-alt"></i></div>
-            <h3>Performance Gap</h3>
-            <p>The performance gap between algorithms widens as graph size and density increase, making algorithm selection more critical for larger graphs.</p>
-          </div>
-          <div class="finding-card">
-            <div class="icon"><i class="fas fa-memory"></i></div>
-            <h3>Memory Efficiency</h3>
-            <p>For memory-constrained environments, the Arboricity-based algorithm offers the best balance of performance and memory usage.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <div class="container">
-      <div class="footer-content">
-        <div class="footer-section">
-          <h3>Maximal Clique Enumeration</h3>
-          <p>A research project on implementing and comparing algorithms for maximal clique enumeration in graphs.</p>
-        </div>
-        <div class="footer-section">
-          <h3>Links</h3>
-          <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="algorithms.html">Algorithms</a></li>
-            <li><a href="datasets.html">Datasets</a></li>
-            <li><a href="results.html">Results</a></li>
-            <li><a href="code.html">Source Code</a></li>
-            <li><a href="report.html">Report</a></li>
-          </ul>
-        </div>
-        <div class="footer-section">
-          <h3>Connect</h3>
-          <div class="social-links">
-            <a href="https://github.com/yourusername/maximal-clique-enumeration"><i class="fab fa-github"></i></a>
-            <a href="mailto:your.email@example.com"><i class="fas fa-envelope"></i></a>
-          </div>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p>&copy; 2023 Maximal Clique Enumeration Project. All rights reserved.</p>
-      </div>
-    </div>
-  </footer>
-
-  <script src="assets/js/script.js"></script>
-  <script>
-    // Small Datasets Chart
-    const smallDatasetCtx = document.getElementById('smallDatasetChart').getContext('2d');
-    const smallDatasetChart = new Chart(smallDatasetCtx, {
-      type: 'bar',
-      data: {
-        labels: ['Karate Club', 'Random-500-0.1', 'Barabasi-1000', 'Watts-Strogatz-1000'],
-        datasets: [
-          {
-            label: 'CLIQUE',
-            data: [12, 1450, 720, 950],
-            backgroundColor: 'rgba(255, 99, 132, 0.7)',
-            borderColor: 'rgba(255, 99, 132, 1)',
-            borderWidth: 1
-          },
-          {
-            label: 'Bron-Kerbosch',
-            data: [8, 620, 310, 480],
-            backgroundColor: 'rgba(54, 162, 235, 0.7)',
-            borderColor: 'rgba(54, 162, 235, 1)',
-            borderWidth: 1
-          },
-          {
-            label: 'Arboricity',
-            data: [10, 780, 280, 520],
-            backgroundColor: 'rgba(75, 192, 192, 0.7)',
-            borderColor: 'rgba(75, 192, 192, 1)',
-            borderWidth: 1
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        scales: {
-          y: {
-            beginAtZero: true,
-            title: {
-              display: true,
-              text: 'Runtime (ms)'
-            }
-          },
-          x: {
-            title: {
-              display: true,
-              text: 'Dataset'
-            }
-          }
-        }
-      }
-    });
-
-    // Large Datasets Chart
-    const largeDatasetCtx = document.getElementById('largeDatasetChart').getContext('2d');
-    const largeDatasetChart = new Chart(largeDatasetCtx, {
-      type: 'bar',
-      data: {
-        labels: ['Facebook Ego', 'Protein Interaction', 'Web Graph', 'Random-500-0.5'],
-        datasets: [
-          {
-            label: 'CLIQUE',
-            data: [3250, 850, 45200, 28500],
-            backgroundColor: 'rgba(255, 99, 132, 0.7)',
-            borderColor: 'rgba(255, 99, 132, 1)',
-            borderWidth: 1
-          },
-          {
-            label: 'Bron-Kerbosch',
-            data: [1120, 320, 12800, 15200],
-            backgroundColor: 'rgba(54, 162, 235, 0.7)',
-            borderColor: 'rgba(54, 162, 235, 1)',
-            borderWidth: 1
-          },
-          {
-            label: 'Arboricity',
-            data: [1850, 280, 9500, 18700],
-            backgroundColor: 'rgba(75, 192, 192, 0.7)',
-            borderColor: 'rgba(75, 192, 192, 1)',
-            borderWidth: 1
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        scales: {
-          y: {
-            beginAtZero: true,
-            title: {
-              display: true,
-              text: 'Runtime (ms)'
-            }
-          },
-          x: {
-            title: {
-              display: true,
-              text: 'Dataset'
-            }
-          }
-        }
-      }
-    });
-
-    // Graph Type Chart
-    const graphTypeCtx = document.getElementById('graphTypeChart').getContext('2d');
-    const graphTypeChart = new Chart(graphTypeCtx, {
-      type: 'radar',
-      data: {
-        labels: ['Sparse Graphs', 'Dense Graphs', 'Social Networks', 'Web Graphs', 'Biological Networks'],
-        datasets: [
-          {
-            label: 'CLIQUE',
-            data: [40, 30, 50, 35, 45],
-            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-            borderColor: 'rgba(255, 99, 132, 1)',
-            pointBackgroundColor: 'rgba(255, 99, 132, 1)',
-            pointBorderColor: '#fff',
-            pointHoverBackgroundColor: '#fff',
-            pointHoverBorderColor: 'rgba(255, 99, 132, 1)'
-          },
-          {
-            label: 'Bron-Kerbosch',
-            data: [70, 80, 75, 65, 60],
-            backgroundColor: 'rgba(54, 162, 235, 0.2)',
-            borderColor: 'rgba(54, 162, 235, 1)',
-            pointBackgroundColor: 'rgba(54, 162, 235, 1)',
-            pointBorderColor: '#fff',
-            pointHoverBackgroundColor: '#fff',
-            pointHoverBorderColor: 'rgba(54, 162, 235, 1)'
-          },
-          {
-            label: 'Arboricity',
-            data: [85, 60, 65, 90, 80],
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            borderColor: 'rgba(75, 192, 192, 1)',
-            pointBackgroundColor: 'rgba(75, 192, 192, 1)',
-            pointBorderColor: '#fff',
-            pointHoverBackgroundColor: '#fff',
-            pointHoverBorderColor: 'rgba(75, 192, 192, 1)'
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        scales: {
-          r: {
-            angleLines: {
-              display: true
-            },
-            suggestedMin: 0,
-            suggestedMax: 100
-          }
-        }
-      }
-    });
-
-    // Scalability Chart
-    const scalabilityCtx = document.getElementById('scalabilityChart').getContext('2d');
-    const scalabilityChart = new Chart(scalabilityCtx, {
-      type: 'line',
-      data: {
-        labels: ['100', '500', '1000', '5000', '10000', '50000', '100000'],
-        datasets: [
-          {
-            label: 'CLIQUE',
-            data: [10, 150, 720, 8500, 25000, null, null],
-            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-            borderColor: 'rgba(255, 99, 132, 1)',
-            borderWidth: 2,
-            tension: 0.1
-          },
-          {
-            label: 'Bron-Kerbosch',
-            data: [5, 80, 310, 2200, 6500, 42000, 95000],
-            backgroundColor: 'rgba(54, 162, 235, 0.2)',
-            borderColor: 'rgba(54, 162, 235, 1)',
-            borderWidth: 2,
-            tension: 0.1
-          },
-          {
-            label: 'Arboricity',
-            data: [8, 90, 280, 1800, 5200, 35000, 82000],
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            borderColor: 'rgba(75, 192, 192, 1)',
-            borderWidth: 2,
-            tension: 0.1
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        scales: {
-          y: {
-            beginAtZero: true,
-            title: {
-              display: true,
-              text: 'Runtime (ms)'
-            }
-          },
-          x: {
-            title: {
-              display: true,
-              text: 'Number of Vertices'
-            }
-          }
-        }
-      }
-    });
-
-    // Memory Chart
-    const memoryCtx = document.getElementById('memoryChart').getContext('2d');
-    const memoryChart = new Chart(memoryCtx, {
-      type: 'bar',
-      data: {
-        labels: ['Small Graph', 'Medium Graph', 'Large Graph'],
-        datasets: [
-          {
-            label: 'CLIQUE',
-            data: [15, 120, 850],
-            backgroundColor: 'rgba(255, 99, 132, 0.7)',
-            borderColor: 'rgba(255, 99, 132, 1)',
-            borderWidth: 1
-          },
-          {
-            label: 'Bron-Kerbosch',
-            data: [18, 145, 920],
-            backgroundColor: 'rgba(54, 162, 235, 0.7)',
-            borderColor: 'rgba(54, 162, 235, 1)',
-            borderWidth: 1
-          },
-          {
-            label: 'Arboricity',
-            data: [12, 110, 780],
-            backgroundColor: 'rgba(75, 192, 192, 0.7)',
-            borderColor: 'rgba(75, 192, 192, 1)',
-            borderWidth: 1
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        scales: {
-          y: {
-            beginAtZero: true,
-            title: {
-              display: true,
-              text: 'Memory Usage (MB)'
-            }
-          },
-          x: {
-            title: {
-              display: true,
-              text: 'Graph Size'
-            }
-          }
-        }
-      }
-    });
-
-    // Density Chart
-    const densityCtx = document.getElementById('densityChart').getContext('2d');
-    const densityChart = new Chart(densityCtx, {
-      type: 'scatter',
-      data: {
-        datasets: [
-          {
-            label: 'CLIQUE',
-            data: [
-              {x: 0.003, y: 850},
-              {x: 0.006, y: 720},
-              {x: 0.01, y: 950},
-              {x: 0.011, y: 3250},
-              {x: 0.1, y: 1450},
-              {x: 0.139, y: 12},
-              {x: 0.5, y: 28500}
-            ],
-            backgroundColor: 'rgba(255, 99, 132, 0.7)',
-            borderColor: 'rgba(255, 99, 132, 1)',
-            borderWidth: 1
-          },
-          {
-            label: 'Bron-Kerbosch',
-            data: [
-              {x: 0.003, y: 320},
-              {x: 0.006, y: 310},
-              {x: 0.01, y: 480},
-              {x: 0.011, y: 1120},
-              {x: 0.1, y: 620},
-              {x: 0.139, y: 8},
-              {x: 0.5, y: 15200}
-            ],
-            backgroundColor: 'rgba(54, 162, 235, 0.7)',
-            borderColor: 'rgba(54, 162, 235, 1)',
-            borderWidth: 1
-          },
-          {
-            label: 'Arboricity',
-            data: [
-              {x: 0.003, y: 280},
-              {x: 0.006, y: 280},
-              {x: 0.01, y: 520},
-              {x: 0.011, y: 1850},
-              {x: 0.1, y: 780},
-              {x: 0.139, y: 10},
-              {x: 0.5, y: 18700}
-            ],
-            backgroundColor: 'rgba(75, 192, 192, 0.7)',
-            borderColor: 'rgba(75, 192, 192, 1)',
-            borderWidth: 1
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        scales: {
-          y: {
-            beginAtZero: true,
-            title: {
-              display: true,
-              text: 'Runtime (ms)'
-            }
-          },
-          x: {
-            type: 'logarithmic',
-            title: {
-              display: true,
-              text: 'Graph Density (log scale)'
-            }
-          }
-        }
-      }
-    });
-  </script>
+    <script src="assets/js/script.js"></script>
 </body>
 </html>
-
