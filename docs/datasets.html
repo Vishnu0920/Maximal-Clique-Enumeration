@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Datasets - Maximal Clique Enumeration</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <div class="container">
+        <div class="logo">
+          <a href="index.html">Maximal Clique Enumeration</a>
+        </div>
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="algorithms.html">Algorithms</a></li>
+          <li><a href="datasets.html" class="active">Datasets</a></li>
+          <li><a href="results.html">Results</a></li>
+          <li><a href="code.html">Source Code</a></li>
+          <li><a href="report.html">Report</a></li>
+        </ul>
+        <div class="hamburger">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="page-header">
+      <div class="container">
+        <h1>Datasets</h1>
+        <p>Information about the graph datasets used for testing the maximal clique enumeration algorithms.</p>
+      </div>
+    </section>
+
+    <section class="dataset-overview">
+      <div class="container">
+        <h2>Dataset Selection Criteria</h2>
+        <p>We selected a diverse set of graph datasets to evaluate the performance of the three maximal clique enumeration algorithms. The datasets vary in size, density, and structure to provide a comprehensive comparison across different graph types.</p>
+        
+        <div class="selection-criteria">
+          <div class="criteria-item">
+            <div class="icon"><i class="fas fa-expand"></i></div>
+            <h3>Size Variation</h3>
+            <p>Graphs ranging from small (hundreds of vertices) to large (millions of vertices) to test scalability.</p>
+          </div>
+          <div class="criteria-item">
+            <div class="icon"><i class="fas fa-compress"></i></div>
+            <h3>Density Variation</h3>
+            <p>Both sparse and dense graphs to evaluate algorithm performance under different density conditions.</p>
+          </div>
+          <div class="criteria-item">
+            <div class="icon"><i class="fas fa-project-diagram"></i></div>
+            <h3>Structure Diversity</h3>
+            <p>Real-world networks (social, biological, web) and synthetic graphs with controlled properties.</p>
+          </div>
+          <div class="criteria-item">
+            <div class="icon"><i class="fas fa-chart-line"></i></div>
+            <h3>Clique Distribution</h3>
+            <p>Graphs with varying distributions of maximal cliques to test algorithm efficiency.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="dataset-list">
+      <div class="container">
+        <h2>Dataset Details</h2>
+        <div class="table-responsive">
+            <table class="dataset-table">
+                <thead>
+                  <tr>
+                    <th>Dataset</th>
+                    <th>Nodes</th>
+                    <th>Edges</th>
+                    <th>Average Clustering Coefficient</th>
+                    <th>Diameter</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Autonomous Systems (Skitter)</td>
+                    <td>1,696,415</td>
+                    <td>11,095,298</td>
+                    <td>0.2581</td>
+                    <td>25</td>
+                  </tr>
+                  <tr>
+                    <td>Wikipedia Vote Network</td>
+                    <td>7,115</td>
+                    <td>103,689</td>
+                    <td>0.1409</td>
+                    <td>7</td>
+                  </tr>
+                  <tr>
+                    <td>Enron Email Network</td>
+                    <td>36,692</td>
+                    <td>183,831</td>
+                    <td>0.4970</td>
+                    <td>11</td>
+                  </tr>
+                </tbody>
+              </table> 
+        </div>
+      </div>
+    </section>
+
+   
+
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>Maximal Clique Enumeration</h3>
+          <p>A research project on implementing and comparing algorithms for maximal clique enumeration in graphs.</p>
+        </div>
+        <div class="footer-section">
+          <h3>Links</h3>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="algorithms.html">Algorithms</a></li>
+            <li><a href="datasets.html">Datasets</a></li>
+            <li><a href="results.html">Results</a></li>
+            <li><a href="code.html">Source Code</a></li>
+            <li><a href="report.html">Report</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3>Connect</h3>
+          <div class="social-links">
+            <a href="https://github.com/yourusername/maximal-clique-enumeration"><i class="fab fa-github"></i></a>
+            <a href="mailto:your.email@example.com"><i class="fas fa-envelope"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2023 Maximal Clique Enumeration Project. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // Degree Distribution Chart
+    const degreeCtx = document.getElementById('degreeChart').getContext('2d');
+    const degreeChart = new Chart(degreeCtx, {
+      type: 'bar',
+      data: {
+        labels: ['Karate Club', 'Facebook Ego', 'Protein Interaction', 'Web Graph', 'Random-500-0.1', 'Random-500-0.5', 'Barabasi-1000', 'Watts-Strogatz-1000'],
+        datasets: [{
+          label: 'Average Degree',
+          data: [4.6, 43.7, 9.1, 11.7, 49.7, 249.5, 6.0, 10.0],
+          backgroundColor: 'rgba(54, 162, 235, 0.7)',
+          borderColor: 'rgba(54, 162, 235, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'Average Degree'
+            }
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'Dataset'
+            }
+          }
+        }
+      }
+    });
+
+    // Clustering Coefficient Chart
+    const clusteringCtx = document.getElementById('clusteringChart').getContext('2d');
+    const clusteringChart = new Chart(clusteringCtx, {
+      type: 'bar',
+      data: {
+        labels: ['Karate Club', 'Facebook Ego', 'Protein Interaction', 'Web Graph', 'Random-500-0.1', 'Random-500-0.5', 'Barabasi-1000', 'Watts-Strogatz-1000'],
+        datasets: [{
+          label: 'Clustering Coefficient',
+          data: [0.57, 0.61, 0.17, 0.11, 0.10, 0.50, 0.06, 0.50],
+          backgroundColor: 'rgba(255, 99, 132, 0.7)',
+          borderColor: 'rgba(255, 99, 132, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 1,
+            title: {
+              display: true,
+              text: 'Clustering Coefficient'
+            }
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'Dataset'
+            }
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
+

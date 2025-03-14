@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Algorithms - Maximal Clique Enumeration</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <div class="container">
+        <div class="logo">
+          <a href="index.html">Maximal Clique Enumeration</a>
+        </div>
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="algorithms.html" class="active">Algorithms</a></li>
+          <li><a href="datasets.html">Datasets</a></li>
+          <li><a href="results.html">Results</a></li>
+          <li><a href="code.html">Source Code</a></li>
+          <li><a href="report.html">Report</a></li>
+        </ul>
+        <div class="hamburger">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="page-header">
+      <div class="container">
+        <h1>Algorithms</h1>
+        <p>Detailed explanation of the three maximal clique enumeration algorithms implemented in this project.</p>
+      </div>
+    </section>
+
+    <section class="algorithm-section">
+      <div class="container">
+        <h2>CLIQUE Algorithm</h2>
+        <div class="algorithm-card">
+          <div class="algorithm-info">
+            <h3>Paper Information</h3>
+            <p><strong>Title:</strong> "An Efficient Algorithm for the Maximal Clique Problem"</p>
+            <p><strong>Authors:</strong> E. Tomita, A. Tanaka, H. Takahashi</p>
+            <p><strong>Publication:</strong> IEICE Transactions on Information and Systems, 1989</p>
+          </div>
+          
+          <div class="algorithm-description">
+            <h3>Key Idea</h3>
+            <p>The CLIQUE algorithm uses a depth-first search approach with pruning techniques to efficiently enumerate all maximal cliques in a graph.</p>
+            
+            <h3>Pseudocode</h3>
+            <pre><code class="language-plaintext">
+CLIQUE(R, P, X):
+  if P is empty and X is empty:
+    report R as a maximal clique
+    return
+  
+  choose a pivot vertex u from P ∪ X
+  for each vertex v in P \ N(u):
+    CLIQUE(R ∪ {v}, P ∩ N(v), X ∩ N(v))
+    P = P \ {v}
+    X = X ∪ {v}
+            </code></pre>
+            
+            <h3>Complexity Analysis</h3>
+            <p><strong>Time Complexity:</strong> O(3^(n/3)) in the worst case, where n is the number of vertices.</p>
+            <p><strong>Space Complexity:</strong> O(n + m), where n is the number of vertices and m is the number of edges.</p>
+          </div>
+          
+          
+        </div>
+      </div>
+    </section>
+
+    <section class="algorithm-section">
+      <div class="container">
+        <h2>Bron-Kerbosch Degeneracy Algorithm</h2>
+        <div class="algorithm-card">
+          <div class="algorithm-info">
+            <h3>Paper Information</h3>
+            <p><strong>Title:</strong> "Algorithm 457: Finding All Cliques of an Undirected Graph"</p>
+            <p><strong>Authors:</strong> C. Bron, J. Kerbosch</p>
+            <p><strong>Publication:</strong> Communications of the ACM, 1973</p>
+            <p><strong>Degeneracy Ordering Enhancement:</strong> "Listing All Maximal Cliques in Sparse Graphs in Near-optimal Time" by D. Eppstein et al.</p>
+          </div>
+          
+          <div class="algorithm-description">
+            <h3>Key Idea</h3>
+            <p>The Bron-Kerbosch algorithm with degeneracy ordering uses a vertex ordering based on the graph's degeneracy to improve performance, especially on sparse graphs.</p>
+            
+            <h3>Pseudocode</h3>
+            <pre><code class="language-plaintext">
+BronKerboschDegeneracy(G):
+  Compute degeneracy ordering α of G
+  for i = 1 to n:
+    v = α(i)
+    P = {α(j) | j > i and {v, α(j)} ∈ E}
+    X = {α(j) | j < i and {v, α(j)} ∈ E}
+    BronKerbosch({v}, P, X)
+
+BronKerbosch(R, P, X):
+  if P is empty and X is empty:
+    report R as a maximal clique
+    return
+  
+  choose a pivot vertex u from P ∪ X
+  for each vertex v in P \ N(u):
+    BronKerbosch(R ∪ {v}, P ∩ N(v), X ∩ N(v))
+    P = P \ {v}
+    X = X ∪ {v}
+            </code></pre>
+            
+            <h3>Complexity Analysis</h3>
+            <p><strong>Time Complexity:</strong> O(d·3^(d/3)·n), where d is the degeneracy of the graph and n is the number of vertices.</p>
+            <p><strong>Space Complexity:</strong> O(n + m), where n is the number of vertices and m is the number of edges.</p>
+          </div>
+          
+          
+        </div>
+      </div>
+    </section>
+
+    <section class="algorithm-section">
+      <div class="container">
+        <h2>Arboricity-based Algorithm</h2>
+        <div class="algorithm-card">
+          <div class="algorithm-info">
+            <h3>Paper Information</h3>
+            <p><strong>Title:</strong> "Arboricity and Subgraph Listing Algorithms"</p>
+            <p><strong>Authors:</strong> N. Chiba, T. Nishizeki</p>
+            <p><strong>Publication:</strong> SIAM Journal on Computing, 1985</p>
+          </div>
+          
+          <div class="algorithm-description">
+            <h3>Key Idea</h3>
+            <p>The Arboricity-based algorithm leverages the graph's arboricity (a measure of graph sparsity) to efficiently enumerate maximal cliques with improved theoretical bounds.</p>
+            
+            <h3>Pseudocode</h3>
+            <pre><code class="language-plaintext">
+ArboricityClique(G):
+  Compute an acyclic orientation of G with bounded outdegree
+  for each vertex v in V:
+    C = {v}
+    P = N+(v) (outgoing neighbors of v)
+    ArboricityCliqueRecursive(C, P)
+
+ArboricityCliqueRecursive(C, P):
+  if P is empty:
+    report C as a maximal clique
+    return
+  
+  while P is not empty:
+    choose a vertex u from P
+    P = P \ {u}
+    C' = C ∪ {u}
+    P' = P ∩ N+(u)
+    ArboricityCliqueRecursive(C', P')
+            </code></pre>
+            
+            <h3>Complexity Analysis</h3>
+            <p><strong>Time Complexity:</strong> O(a(G)·m·k), where a(G) is the arboricity of the graph, m is the number of edges, and k is the number of maximal cliques.</p>
+            <p><strong>Space Complexity:</strong> O(n + m), where n is the number of vertices and m is the number of edges.</p>
+          </div>
+          
+          
+        </div>
+      </div>
+    </section>
+
+    <section class="algorithm-comparison">
+      <div class="container">
+        <h2>Algorithm Comparison</h2>
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Algorithm</th>
+              <th>Time Complexity</th>
+              <th>Best For</th>
+              <th>Key Advantage</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>CLIQUE</td>
+              <td>O(3^(n/3))</td>
+              <td>General graphs</td>
+              <td>Simple implementation, good for small graphs</td>
+            </tr>
+            <tr>
+              <td>Bron-Kerbosch Degeneracy</td>
+              <td>O(d·3^(d/3)·n)</td>
+              <td>Sparse graphs</td>
+              <td>Efficient for graphs with low degeneracy</td>
+            </tr>
+            <tr>
+              <td>Arboricity-based</td>
+              <td>O(a(G)·m·k)</td>
+              <td>Planar and sparse graphs</td>
+              <td>Optimal for graphs with bounded arboricity</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>Maximal Clique Enumeration</h3>
+          <p>A research project on implementing and comparing algorithms for maximal clique enumeration in graphs.</p>
+        </div>
+        <div class="footer-section">
+          <h3>Links</h3>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="algorithms.html">Algorithms</a></li>
+            <li><a href="datasets.html">Datasets</a></li>
+            <li><a href="results.html">Results</a></li>
+            <li><a href="code.html">Source Code</a></li>
+            <li><a href="report.html">Report</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3>Connect</h3>
+          <div class="social-links">
+            <a href="https://github.com/yourusername/maximal-clique-enumeration"><i class="fab fa-github"></i></a>
+            <a href="mailto:your.email@example.com"><i class="fas fa-envelope"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2023 Maximal Clique Enumeration Project. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/script.js"></script>
+</body>
+</html>
+
