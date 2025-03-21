@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Source Code</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        /* Additional styles for code viewer */
+        .code-viewer {
+            margin: 20px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .tabs {
+            display: flex;
+            background: #f5f5f5;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .tab-btn {
+            padding: 12px 20px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .tab-btn.active {
+            background: #0077cc;
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 15px;
+            max-height: 500px;
+            overflow-y: auto;
+            background: white;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        pre {
+            margin: 0;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="algorithms.html">Algorithms</a>
+        <a href="datasets.html">Datasets</a>
+        <a href="results.html">Results</a>
+        <a href="code.html">Source Code</a>
+        <a href="report.html">Report</a>
+    </nav>
+    <header>
+        <h1>Source Code</h1>
+    </header>
+    <section>
+        <h2>GitHub Repository</h2>
+        <a href="https://github.com/<username>/maximal-clique-enumeration" target="_blank" class="github-btn">
+            View on GitHub
+        </a>
+    </section>
+
+    <section>
+        <h2>Algorithm Implementations</h2>
+        <div class="code-viewer">
+            <div class="tabs">
+                <button class="tab-btn active" onclick="openTab(event, 'tab1')">CLIQUE</button>
+                <button class="tab-btn" onclick="openTab(event, 'tab2')">Bron-Kerbosch</button>
+                <button class="tab-btn" onclick="openTab(event, 'tab3')">Arboricity</button>
+            </div>
+            
+            <div id="tab1" class="tab-content active">
+                <pre><code>// CLIQUE Algorithm Implementation
+function clique(R, P, X) {
+    if (P.size === 0 && X.size === 0) {
+        reportClique(R);
+        return;
+    }
+    
+    for (const v of P) {
+        const neighbors = getNeighbors(v);
+        clique(new Set([...R, v]), 
+               intersection(P, neighbors),
+               intersection(X, neighbors));
+        P.delete(v);
+        X.add(v);
+    }
+}</code></pre>
+            </div>
+            
+            <div id="tab2" class="tab-content">
+                <pre><code>// Bron-Kerbosch Degeneracy Implementation
+function bronKerboschDegeneracy(graph) {
+    const order = degeneracyOrder(graph);
+    let results = [];
+    
+    for (const v of order) {
+        const neighbors = graph[v];
+        bronKerbosch(
+            new Set([v]),
+            new Set(neighbors),
+            new Set(),
+            results
+        );
+        // Pivot selection and pruning here
+    }
+    return results;
+}</code></pre>
+            </div>
+            
+            <div id="tab3" class="tab-content">
+                <pre><code>// Arboricity-based Implementation
+function arboricityClique(graph) {
+    const arboricity = calculateArboricity(graph);
+    const cliques = [];
+    
+    for (const edge of graph.edges) {
+        const [u, v] = edge;
+        const commonNeighbors = intersection(
+            graph.neighbors(u),
+            graph.neighbors(v)
+        );
+        // Expand common neighbors to maximal cliques
+        // using arboricity-based pruning
+    }
+    return cliques;
+}</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Build and Run Instructions</h2>
+        <pre>
+# Clone the repository
+git clone https://github.com/<username>/maximal-clique-enumeration.git
+cd maximal-clique-enumeration
+
+# Build the code
+make
+
+# Run the algorithms
+./run --dataset datasets/graph1.txt</pre>
+    </section>
+
+    <script>
+        function openTab(evt, tabName) {
+            // Hide all tab content
+            const tabContents = document.getElementsByClassName("tab-content");
+            for (const tab of tabContents) {
+                tab.classList.remove("active");
+            }
+            
+            // Deactivate all tab buttons
+            const tabBtns = document.getElementsByClassName("tab-btn");
+            for (const btn of tabBtns) {
+                btn.classList.remove("active");
+            }
+            
+            // Show selected tab and activate button
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+    </script>
+</body>
+</html>

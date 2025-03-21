@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maximal Clique Enumeration</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="algorithms.html">Algorithms</a>
+        <a href="datasets.html">Datasets</a>
+        <a href="results.html">Results</a>
+        <a href="code.html">Source Code</a>
+        <a href="report.html">Report</a>
+    </nav>
+    <header>
+        <h1>Maximal Clique Enumeration</h1>
+        <p>Implementation and comparison of three maximal clique enumeration algorithms.</p>
+    </header>
+    <section>
+        <h2>Project Overview</h2>
+        <p>Finding maximal cliques in a graph is a fundamental problem in graph theory, with applications in:</p>
+        <ul>
+            <li>Social networks</li>
+            <li>Bioinformatics</li>
+            <li>Recommendation systems</li>
+            <li>Fraud detection</li>
+            <li>And more...</li>
+        </ul>
+        <p>A <strong>clique</strong> in a graph is a subset of vertices such that every two vertices in the subset are directly connected by an edge. A clique is called <strong>maximal</strong> if no additional vertex can be added to it without breaking its complete connectivity. Maximal cliques are crucial for understanding the dense substructures within graphs.</p>
+        <p>This project explores three different maximal clique enumeration algorithms from academic research and compares their performance on real-world graph datasets.</p>
+        
+        <h2>Problem Statement</h2>
+        <p>Given a graph <strong>G(V, E)</strong>, where:</p>
+        <ul>
+            <li><strong>V</strong> = Set of vertices (nodes)</li>
+            <li><strong>E</strong> = Set of edges (connections)</li>
+        </ul>
+        <p>The task is to efficiently find all <strong>maximal cliques</strong> present in the graph.</p>
+        <p>Since finding cliques is computationally expensive (exponential time complexity in the worst case), different approaches optimize enumeration in various scenarios.</p>
+        
+        <h2>Algorithms Implemented</h2>
+        <p>We have implemented and compared the following three maximal clique enumeration algorithms:</p>
+        
+        <h3>1. Depth-First Search (DFS) Based Approach</h3>
+        <p><strong>📄 Paper:</strong> "The Worst-Case Time Complexity for Generating All Maximal Cliques"</p>
+        <ul>
+            <li>Implements the <strong>CLIQUE</strong> algorithm (Page 31)</li>
+            <li>Uses a depth-first recursive approach with pruning</li>
+            <li><strong>Theoretical worst-case time complexity:</strong> O(3ⁿ/³)</li>
+        </ul>
+        <p><a href="assets/papers/dfs_clique.pdf" target="_blank">📂 Access Paper</a></p>
+        
+        <h3>2. Bron–Kerbosch Algorithm with Degeneracy Ordering</h3>
+        <p><strong>📄 Paper:</strong> "Listing All Maximal Cliques in Sparse Graphs in Near-Optimal Time"</p>
+        <ul>
+            <li>Implements <strong>proc BronKerboschDegeneracy(V,E)</strong> (Figure 4)</li>
+            <li>Uses graph degeneracy to optimize recursion</li>
+            <li>Efficient for sparse real-world networks</li>
+            <li><strong>Time complexity:</strong> O(d * n * 3^(d/3)) (where d = degeneracy)</li>
+        </ul>
+        <p><a href="assets/papers/bron_kerbosch.pdf" target="_blank">📂 Access Paper</a></p>
+        
+        <h3>3. Arboricity-Based Subgraph Listing</h3>
+        <p><strong>📄 Paper:</strong> "Arboricity and Subgraph Listing Algorithms"</p>
+        <ul>
+            <li>Implements the <strong>CLIQUE</strong> procedure (Pages 220-222)</li>
+            <li>Uses graph sparsity (arboricity) to limit the search space</li>
+            <li><strong>Time complexity:</strong> O(a(G) * m) (where a(G) = arboricity of the graph)</li>
+        </ul>
+        <p><a href="assets/papers/arboricity_clique.pdf" target="_blank">📂 Access Paper</a></p>
+        
+        <p>Explore the sections above to learn more!</p>
+    </section>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algorithms</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="algorithms.html">Algorithms</a>
+        <a href="datasets.html">Datasets</a>
+        <a href="results.html">Results</a>
+        <a href="code.html">Source Code</a>
+        <a href="report.html">Report</a>
+    </nav>
+    <header>
+        <h1>Algorithms</h1>
+    </header>
+    <section>
+        <h2>CLIQUE (Paper 1)</h2>
+        <p><strong>Key Idea</strong>: Enumerate maximal cliques using a backtracking approach.</p>
+        <pre><code>procedure CLIQUE(R, P, X):
+    if P and X are empty:
+        report R as a maximal clique
+    for each vertex v in P:
+        CLIQUE(R ∪ {v}, P ∩ N(v), X ∩ N(v))</code></pre>
+        <p><strong>Complexity</strong>: O(3^{n/3}) in the worst case.</p>
+    </section>
+    <section>
+        <h2>Bron-Kerbosch Degeneracy (Paper 2)</h2>
+        <p><strong>Key Idea</strong>: Use vertex degeneracy ordering to reduce search space.</p>
+        <pre><code>procedure BronKerboschDegeneracy(V, E):
+    R ← ∅, P ← V, X ← ∅
+    for each v in V ordered by degeneracy:
+        BronKerbosch(R ∪ {v}, P ∩ N(v), X ∩ N(v))</code></pre>
+        <p><strong>Complexity</strong>: O(d * n * 3^{d/3}), where d is the degeneracy.</p>
+    </section>
+    <section>
+        <h2>Arboricity-based (Paper 3)</h2>
+        <p><strong>Key Idea</strong>: Use arboricity to bound the number of cliques.</p>
+        <pre><code>procedure ArboricityClique(G):
+    for each subgraph H in G:
+        if H is a clique:
+            report H</code></pre>
+        <p><strong>Complexity</strong>: O(m * α), where α is the arboricity.</p>
+    </section>
+</body>
+</html>
