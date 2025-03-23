@@ -77,85 +77,287 @@
             
             <div id="tab1" class="tab-content active">
                 <pre><code>// CLIQUE Algorithm Implementation
-function clique(R, P, X) {
-    if (P.size === 0 && X.size === 0) {
-        reportClique(R);
+#include <iostream>
+#include <vector>
+#include <list>
+#include <fstream>
+#include <sstream>
+#include <unordered_set>
+#include <set>
+#include <chrono>
+using namespace std;
+
+
+long long clique_counter = 0;
+long long max_size = 0;
+
+
+void expand(
+    vector<int>& R, 
+    unordered_set<int> &subgraph, 
+    unordered_set<int> &cand, 
+    unordered_map<int, set<int>> &adj_list, 
+    unordered_map<int, int>& clique_size_counts) {
+
+    if (subgraph.empty()) {
+        clique_size_counts[R.size()]++;
+        max_size = max(max_size, (long long)R.size());
+        clique_counter++;
+        if (clique_counter % 10000 == 0) {
+            cout << "Found " << clique_counter << " cliques so far..." << endl;
+
+         }
+
         return;
     }
-    
-    for (const v of P) {
-        const neighbors = getNeighbors(v);
-        clique(new Set([...R, v]), 
-               intersection(P, neighbors),
-               intersection(X, neighbors));
-        P.delete(v);
-        X.add(v);
+
+    int pivot = -1;
+    int max_neighbors = -1;
+
+
+    for(auto ix: subgraph){
+
+        int count = 0;
+        if(adj_list[ix].size() < cand.size()){
+            for(auto x: adj_list[ix]){
+                if (cand.count(x) != 0){
+                    count++;
+                } 
+            }
+        }
+        else{
+            for(auto x: cand){
+                if(adj_list[ix].count(x) != 0){
+                    count++;
+                } 
+            }
+        }
+
+        if(count > max_neighbors){
+            max_neighbors = count;
+            pivot = ix;
+        }
     }
-}</code></pre>
+
+    auto i = cand.begin();
+
+    while(i != cand.end()){
+
+        unordered_set<int> new_subgraph;
+        unordered_set<int> new_cand;
+
+        int v = *i;
+        if (adj_list.at(pivot).count(v)) {
+            ++i;
+            continue;
+        }
+
+        if(cand.size() < adj_list[v].size()){
+            for(auto it: cand){
+                if(adj_list.at(v).count(it)){
+                    new_cand.insert(it);
+                }
+            }
+        }
+
+        else {
+            for (auto y: adj_list[v]) {
+                if (cand.count(y) != 0) new_cand.insert(y);
+            }
+        }
+        
+        if (subgraph.size() < adj_list[v].size()) {
+            for (auto y: subgraph) {
+                if (adj_list.at(v).count(y) != 0) new_subgraph.insert(y);
+            }
+        }
+         else {
+            for (auto y: adj_list[v]) {
+
+                if(subgraph.find(y) != subgraph.end()) new_subgraph.insert(y);
+            }
+        }
+        R.push_back(v);
+        expand(R, new_subgraph, new_cand, adj_list, clique_size_counts);
+        R.pop_back();
+        i = cand.erase(i);
+    }
+
+}
+
+
+
+int main(int argc, char* argv[]) {
+    if (argc < 2) {
+        cerr << "Usage: " << argv[0] << " <filename>" << endl;
+        return 1;
+    }
+    
+    string filename = argv[1];
+    cout<<"Finding cliques in the testset graph in: "<<filename<<endl;
+    
+    ifstream file(filename);
+    string line;
+    unordered_map<int, set<int>> adj_list;
+
+    auto start_time = chrono::high_resolution_clock::now();
+
+
+    while (getline(file, line) && line[0] == '#') {}
+    if (line[0] != '#') {
+        istringstream iss(line);
+        int source, target;
+        if (iss >> source >> target && source != target) {
+            adj_list[source].insert(target);
+            adj_list[target].insert(source);
+        }
+    }
+    
+    while (getline(file, line)) {
+        if (line[0] == '#') continue;
+        
+        istringstream iss(line);
+        int source, target;
+        if (iss >> source >> target && source != target) {
+            adj_list[source].insert(target);
+            adj_list[target].insert(source);
+        }
+    }
+
+    unordered_set<int> sub_graph;
+    unordered_set<int> candidates;
+    unordered_map<int, int> clique_size_counts;
+
+    for (const auto &[x, _] : adj_list) {
+        candidates.insert(x);
+        sub_graph.insert(x);
+    }
+
+    vector<int> R;
+    
+    expand(R, sub_graph, candidates, adj_list, clique_size_counts);
+
+    auto end_time = chrono::high_resolution_clock::now();
+    chrono::duration<double> duration = end_time - start_time;
+    cout << "Number of cliques: " << clique_counter << endl;
+    cout << "Maximum clique size: " << max_size << endl;
+
+    cout << "\nClique size distribution:" << endl;
+    cout << "Size\tCount" << endl;
+    cout << "----------------" << endl;
+    int total_cliques = 0;
+    for (const auto& [size, count] : clique_size_counts) {
+        cout << size << "\t" << count << endl;
+        total_cliques += count;
+    }
+
+    cout << "Execution Time: " << duration.count() << " seconds" << endl;
+
+    return 0;
+
+}
+    
+</code></pre>
             </div>
             
             <div id="tab2" class="tab-content">
-                <pre><code>#include &lt;iostream&gt;
-#include &lt;vector&gt;
-#include &lt;unordered_map&gt;
-#include &lt;unordered_set&gt;
-#include &lt;fstream&gt;
-#include &lt;sstream&gt;
-#include &lt;chrono&gt;
-#include &lt;algorithm&gt;
-#include &lt;map&gt;
+                <pre><code>
+                    #include <iostream>
+#include <vector>
+#include <unordered_map>
+#include <unordered_set>
+#include <fstream>
+#include <sstream>
+#include <chrono>
+#include <algorithm>
+#include <map>
+#include <stack>
 
 using namespace std;
 
 long long clique_counter;
 
 vector<int> compute_degeneracy_ordering(const unordered_map<int, unordered_set<int>>& adj_list) {
+    
     unordered_map<int, unordered_set<int>> adj = adj_list;
+    int n = adj.size();
+    
     unordered_map<int, int> degree;
     int max_degree = 0;
-
     for (const auto& [vertex, neighbors] : adj) {
         degree[vertex] = neighbors.size();
-        max_degree = max(max_degree, degree[vertex]);
+        max_degree = std::max(max_degree, static_cast<int>(neighbors.size()));
     }
-
+    
     vector<vector<int>> D(max_degree + 1);
+
     for (const auto& [vertex, deg] : degree) {
         D[deg].push_back(vertex);
+        // cout << vertex << " " << deg;
+        // cout << "\n";
+
     }
 
+    
     vector<int> ordering;
-    for (int i = 0; i < adj.size(); i++) {
+    // ordering.reserve(n);
+    
+    for (int i = 0; i < n; i++) {
         int d = 0;
-        while (d <= max_degree && D[d].empty()) d++;
+        while (d <= max_degree && D[d].empty()) {
+            d++;
+        }
 
         int v = D[d].back();
+        // cout << v;
         D[d].pop_back();
         ordering.push_back(v);
-
-        for (int u : adj[v]) {
-            if (adj[u].count(v)) {
-                adj[u].erase(v);
-                int old_deg = degree[u];
-                int new_deg = old_deg - 1;
-                degree[u] = new_deg;
-                auto& old_list = D[old_deg];
-                old_list.erase(remove(old_list.begin(), old_list.end(), u), old_list.end());
+        // for(int i=0;i<ordering.size();i++){
+        //     cout<<" "<<ordering[i];
+        // }
+        // cout << "\n";
+        
+        auto neighbors = adj[v]; 
+        for (int u : neighbors) {
+            if (adj.find(u) == adj.end() || adj[u].find(v) == adj[u].end()) {
+                continue;
+            }
+            adj[u].erase(v);
+            int old_deg = degree[u];
+            int new_deg = old_deg - 1;
+            degree[u] = new_deg;
+            auto& old_list = D[old_deg];
+            auto it = find(old_list.begin(), old_list.end(), u);
+            if (it != old_list.end()) {
+                old_list.erase(it);
                 D[new_deg].push_back(u);
             }
         }
+        
         adj.erase(v);
     }
+    
     return ordering;
 }
 
-void bron_kerbosch_pivot(vector<int>& R, vector<int>& P, vector<int>& X, 
-    const unordered_map<int, unordered_set<int>>& adj_list, vector<vector<int>>& maximal_cliques, map<int, int>& clique_size_counts) {
+
+void bron_kerbosch_pivot(
+    vector<int>& R, 
+    vector<int>& P, 
+    vector<int>& X, 
+    const unordered_map<int, unordered_set<int>>& adj_list, 
+    vector<vector<int>>& maximal_cliques,
+    map<int, int>& clique_size_counts) {
 
     if (P.empty() && X.empty()) {
         maximal_cliques.push_back(R);
         clique_size_counts[R.size()]++;
         clique_counter++;
+
+        if (clique_counter % 100000 == 0) {
+            cout << "Found " << clique_counter << " cliques so far..." << endl;
+
+        }
         return;
     }
 
@@ -175,7 +377,6 @@ void bron_kerbosch_pivot(vector<int>& R, vector<int>& P, vector<int>& X,
             pivot = u;
         }
     } 
-
     vector<int> P_copy = P; 
 
     for (auto it = P_copy.begin(); it != P_copy.end(); ) {
@@ -201,7 +402,7 @@ void bron_kerbosch_pivot(vector<int>& R, vector<int>& P, vector<int>& X,
 
         bron_kerbosch_pivot(R, new_P, new_X, adj_list, maximal_cliques, clique_size_counts);
         
-        R.pop_back();
+        R.pop_back(); 
         P.erase(remove(P.begin(), P.end(), v), P.end());
         X.push_back(v);
         
@@ -209,62 +410,487 @@ void bron_kerbosch_pivot(vector<int>& R, vector<int>& P, vector<int>& X,
     }
 }
 
-// Test Code
-void test_bron_kerbosch() {
-    unordered_map<int, unordered_set<int>> adj_list = {
-        {1, {2, 3}},
-        {2, {1, 3, 4}},
-        {3, {1, 2, 4}},
-        {4, {2, 3}}
-    };
 
-    vector<int> R, P, X;
-    for (const auto& [vertex, _] : adj_list) {
-        P.push_back(vertex);
-    }
-
+pair<vector<vector<int>>, map<int, int>> bron_kerbosch_with_degeneracy(const unordered_map<int, unordered_set<int>>& adj_list) {
+    auto ordering = compute_degeneracy_ordering(adj_list);
+    
     vector<vector<int>> maximal_cliques;
     map<int, int> clique_size_counts;
-
-    bron_kerbosch_pivot(R, P, X, adj_list, maximal_cliques, clique_size_counts);
-
-    cout << "Maximal Cliques:" << endl;
-    for (const auto& clique : maximal_cliques) {
-        for (int v : clique) {
-            cout << v << " ";
+    
+    unordered_set<int> seen;
+    
+    for (int v: ordering) {        
+        if (adj_list.find(v) == adj_list.end()) continue;
+        
+        vector<int> P, X;
+        for (int neighbor : adj_list.at(v)) {
+            if (!seen.count(neighbor)) {
+                P.push_back(neighbor);
+            } else {
+                X.push_back(neighbor);
+            }
         }
+        
+        vector<int> R = {v};
+        bron_kerbosch_pivot(R, P, X, adj_list, maximal_cliques, clique_size_counts);
+        seen.insert(v);
+    }
+    
+    return {maximal_cliques, clique_size_counts};
+}
+int main(int argc, char* argv[]) {
+    if (argc < 2) {
+        cerr << "Usage: " << argv[0] << " <filename>" << endl;
+        return 1;
+    }
+    
+    string filename = argv[1];
+    cout<<"Finding cliques in the testset graph in: "<<filename<<endl;
+    
+    unordered_map<int, unordered_set<int>> adj_list;
+    ifstream file(filename);
+    string line;
+    while (getline(file, line) && line[0] == '#') {}
+    if (line[0] != '#') {
+        istringstream iss(line);
+        int source, target;
+        if (iss >> source >> target && source != target) {
+            adj_list[source].insert(target);
+            adj_list[target].insert(source);
+        }
+    }
+    
+    while (getline(file, line)) {
+        if (line[0] == '#') continue;
+        
+        istringstream iss(line);
+        int source, target;
+        if (iss >> source >> target && source != target) {
+            adj_list[source].insert(target);
+            adj_list[target].insert(source);
+        }
+    }
+    
+    int edge_count = 0;
+    for (const auto& [vertex, neighbors] : adj_list) {
+        edge_count += neighbors.size();
+    }
+    edge_count /= 2;  
+    
+    auto start_time = chrono::high_resolution_clock::now();
+    
+    vector<int> result = compute_degeneracy_ordering(adj_list);
+  
+    auto end_time = chrono::high_resolution_clock::now();
+    auto duration = chrono::duration_cast<chrono::milliseconds>(end_time - start_time).count();
+        
+    start_time = chrono::high_resolution_clock::now();
+    
+    auto bk_result = bron_kerbosch_with_degeneracy(adj_list);
+    auto maximal_cliques = bk_result.first;
+    auto clique_size_counts = bk_result.second;
+    
+    end_time = chrono::high_resolution_clock::now();
+    duration = chrono::duration_cast<chrono::milliseconds>(end_time - start_time).count();
+    
+    cout << "Number of maximal cliques: " << maximal_cliques.size() << endl;
+    cout << "Time to find maximal cliques: " << duration << " ms" << endl;
+    
+    cout << "\nClique size distribution:" << endl;
+    cout << "Size\tCount" << endl;
+    cout << "----------------" << endl;
+    int total_cliques = 0;
+    for (const auto& [size, count] : clique_size_counts) {
+        cout << size << "\t" << count << endl;
+        total_cliques += count;
+    }
+    cout << "Total number of cliques: " << total_cliques << endl;
+    
+    if (!maximal_cliques.empty()) {
+        auto largest_clique = *max_element(maximal_cliques.begin(), maximal_cliques.end(),
+            [](const vector<int>& a, const vector<int>& b) {
+                return a.size() < b.size();
+            });
+        
+        cout << "\nLargest maximal clique size: " << largest_clique.size() << endl;
+        // cout << "Vertices in largest clique: ";
+        // for (int v : largest_clique) {
+        //     cout << v << " ";
+        // }
         cout << endl;
     }
-
-    cout << "Clique Size Counts:" << endl;
-    for (const auto& [size, count] : clique_size_counts) {
-        cout << "Size " << size << ": " << count << endl;
-    }
+    
+    return 0;
 }
 
-int main() {
-    test_bron_kerbosch();
-    return 0;
-}</code></pre>
+</code></pre>
             </div>
 
             <div id="tab3" class="tab-content">
-                <pre><code>// Arboricity-based Implementation
-function arboricityClique(graph) {
-    const arboricity = calculateArboricity(graph);
-    const cliques = [];
+                <pre><code>
+                    
+#include <iostream>
+#include <fstream>
+//#include "stdc++.h"
+#include <chrono>
+#include <bits/stdc++.h>
+using namespace std;
+using namespace std::chrono;
+
+struct Frame {
+    int idx;
+    int step; // 0: initial, 1: after first subcall, 2: after second subcall
+    unique_ptr<set<int>> CminusNidx;
+    unique_ptr<set<int>> CintersectNidx;
     
-    for (const edge of graph.edges) {
-        const [u, v] = edge;
-        const commonNeighbors = intersection(
-            graph.neighbors(u),
-            graph.neighbors(v)
-        );
-        // Expand common neighbors to maximal cliques
-        // using arboricity-based pruning
+    Frame(int i, int step) :
+    idx(i),
+    step(step),
+    CminusNidx(make_unique<set<int>>()),
+    CintersectNidx(make_unique<set<int>>()) {}
+};
+
+void update(int initialIdx, int numV, vector<vector<int>> &adjList, map<int, int> &cliqueSize, vector<int> &degreesToNodes, vector<int> &denseToSparse){
+    vector<int> T(numV, 0);
+    vector<int> S(numV, 0); // acc the algo
+    vector<bool> CFlag(numV,false); // the clique vector that has a boolean flag for each vertex
+    vector<int> C; //since the expected max clique size is less than 50 we can use a vector to store all the vertices in the clique
+    
+    CFlag[0] = true;
+    C.push_back(0);
+    
+    int TotalCliques = 0;
+    stack<Frame> stack;
+    stack.emplace(initialIdx, 0);
+
+    while(!stack.empty()){
+        Frame current = std::move(stack.top());
+        stack.pop();
+        int idx = current.idx;
+        //int step = current.step;
+
+        if(idx == numV){
+            // cout<<"Clique found: ";
+            // //cuz idx starts from 0
+            // for(auto &v: C){
+            //     cout<<denseToSparse[degreesToNodes[v]]<<" ";
+            // }
+            // cout<<endl;
+            TotalCliques++;
+            if(TotalCliques%5000 == 0){
+                cout<<"Clique "<<TotalCliques<<" found"<<endl;
+            }
+            cliqueSize[(int)C.size()]++;
+            continue;
+        }
+
+        if(current.step == 0){
+            auto CminusNidx = make_unique<set<int>>();
+            auto CintersectNidx = make_unique<set<int>>();
+            for(int v: C){
+                if(binary_search(adjList[idx].begin(), adjList[idx].end(), v)){
+                    CintersectNidx->insert(v);
+                }
+                else{
+                    CminusNidx->insert(v);
+                }
+            }
+            
+            current.CminusNidx = std::move(CminusNidx);
+            current.CintersectNidx = std::move(CintersectNidx);
+                
+            if (!current.CminusNidx->empty()) {
+                current.step = 1;
+                stack.push(std::move(current));
+                stack.emplace(idx + 1, 0); // Subcall A
+                continue;
+            }
+            
+            current.step = 1;
+        }
+        if(current.step == 1){
+            //computing T and S using the saved CminusNidx and CintersectNidx
+            set<int>& CminusNidx = *current.CminusNidx; //on dereferencing, we get a set<int>.
+            //doesnt violate the unique ptr thing because CminusNidx is a reference to the set<int> object not another pointer to it.
+            set<int>& CintersectNidx = *current.CintersectNidx;
+            int CintersectNidxSize = (int)CintersectNidx.size();
+            int CminusNidxSize = (int)CminusNidx.size();
+            //computing T[y]
+            for(int x: CintersectNidx){
+                for(int y: adjList[x]){
+                    if((!CFlag[y]) && y != idx){
+                        T[y]++;
+                    }
+                }
+            }
+
+            //computing S[y]
+            for(int x: CminusNidx){
+                for(int y: adjList[x]){
+                    if((!CFlag[y])){ // do we not have the  && y != idx condition here? --> no
+                        S[y]++;
+                    }
+                }
+            }
+
+            bool FLAG = true;
+            //maximality test
+            for(int v: adjList[idx]){
+                if((!CFlag[v]) && v<idx && T[v]== CintersectNidxSize){
+                    FLAG = false; //{(C intersect N(i))U{i} is not a clique of Gi
+                    break;
+                }
+            }
+
+            //lexico test
+            // note that CintersectNidx corresponds to Co in lemma 6 in the algo
+            // the set CminusNidx is sorted in increasing order so its already sorted.
+            
+            //case when S(y) >= 1
+            int iterationNum = 0; // in the algo it is iteration num from 1 to p where p is the size of CminusNidx
+            //bool firstVertFlag = true;
+            int k_minus1 = 0;
+
+            for(int k: CminusNidx){ // is k in the sorted order?
+                if(!FLAG){
+                    break; // if the flag was already set to false due to earlier tests then break and dont waste time with this test
+                }
+                for(int y: adjList[k]){
+                    if((!CFlag[y]) && y<idx && T[y] == CintersectNidxSize){
+                        //now we have the respective y values
+                        if(y >= k){
+                            S[y]--;
+                        }
+                        else if((S[y]+iterationNum == CminusNidxSize) && y>=k_minus1 && y<k){
+                            //if k is the first vertex to satisfy y<k
+                            //S[y] = S(y);
+                            FLAG = false;
+                            break;
+                        }
+                    }
+                }
+                k_minus1 = k;
+                iterationNum++;
+            }
+            int lastVert = -1;
+            if(CminusNidxSize != 0){
+                lastVert = *CminusNidx.rbegin();
+            }
+            //case when S(y) = 0
+            if(CintersectNidxSize != 0 && FLAG){
+                for(int y=0;y<idx;y++){
+                    if((!CFlag[y]) && T[y] == CintersectNidxSize && S[y] == 0){
+                        if( CminusNidxSize == 0 || lastVert < y){
+                            FLAG = false;
+                            break;
+                        }
+                    }
+                }
+            }
+            else if(CminusNidxSize == 0 || lastVert < idx -1){ // check if -1 is required since we start from 0 not 1
+                FLAG = false;
+            }
+            
+            // setting the modified T and S back to 0.
+            for(int x: CintersectNidx){
+                for(int y: adjList[x]){
+                    if((!CFlag[y]) && y != idx){
+                        T[y]= 0;
+                    }
+                }
+            }
+            for( int x: CminusNidx){
+                for(int y: adjList[x]){
+                    if((!CFlag[y])){
+                        S[y] = 0;
+                    }
+                }
+            }
+            
+            if(FLAG){
+                //Modifying C
+                for(int v: CminusNidx){
+                    if(CFlag[v]){
+                        //erasing v
+                        CFlag[v] = false;
+                        auto it = find(C.begin(), C.end(), v);
+                        if (it != C.end()) {
+                            C.erase(it);
+                        }
+                    }
+                }
+                if (!CFlag[idx]) {
+                    //inserting idx
+                    CFlag[idx] = true;
+                    C.push_back(idx);
+                }
+                current.step = 2;
+                // we dont need to update current.CminusNidx and current.CintersectNidx because CminusNidx and CintersectNidx are already aliases
+                stack.push(std::move(current));
+                stack.emplace(idx+1, 0); // Subcall B
+                continue;
+            }
+        }
+        if(current.step==2){
+            set<int>& CminusNidx = *current.CminusNidx;
+            //set<int>& CintersectNidx = *current.CintersectNidx;
+            //restoring C back.
+            if (CFlag[idx]) {
+                CFlag[idx] = false;
+                auto it = std::find(C.begin(), C.end(), idx);
+                if (it != C.end()) {
+                    C.erase(it);
+                }
+            }
+            for(int v: CminusNidx){
+                if (!CFlag[v]) {
+                    CFlag[v] = true;
+                    C.push_back(v);
+                }
+            }
+        }
     }
-    return cliques;
-}</code></pre>
+}
+
+
+int main(int argc, char* argv[]) {
+    if (argc < 2) {
+        cerr << "Usage: " << argv[0] << " <filename>" << endl;
+        return 1;
+    }
+    
+    string filename = argv[1];
+    cout<<"Finding cliques in the testset graph in: "<<filename<<endl;
+    ifstream file(filename);
+    string line;
+
+    while (getline(file, line)) {
+        if (line.find("# Nodes:") != string::npos) {
+            break;
+        }
+    }
+
+    int numV, numE;
+    sscanf(line.c_str(), "# Nodes: %d Edges: %d", &numV, &numE);
+    cout<<"Number of vertices: "<<numV<<endl;
+    cout<<"Number of edges: "<<numE<<endl;
+
+    getline(file, line); // skip the line "# FromNodeId    ToNodeId"
+
+    
+    // read edges and store as undirected sorted pairs.
+    vector<pair<int, int>> edges;
+    // now, the vertices can be sparse. Therefore we first need to map it down.
+    vector<int> denseToSparse(numV);
+    unordered_map<int,int> sparseToDense;
+    sparseToDense.reserve(numV);
+    int mapperIdxPtr = 0;
+
+    vector<int> degrees(numV, 0); //includes nodes of degree 0
+    vector<int> degreesToNodes; // this will then be sorted in order of degrees; ie degreesSortedNodes
+    vector<int> nodesToDegrees(numV, 0);
+    // this degrees sorted nodes is the order in which we will be traversing the nodes in the algo.
+
+    for(int i=0;i<numV;i++){
+        degreesToNodes.push_back(i);
+    }
+
+    int from, to;
+
+    while (file >> from >> to) {
+        if (from != to){
+            int a = min(from, to);
+            int b = max(from, to);
+            if(sparseToDense.find(a) == sparseToDense.end()){
+                sparseToDense[a] = mapperIdxPtr;
+                denseToSparse[mapperIdxPtr] = a;
+                mapperIdxPtr++;
+            }
+            if(sparseToDense.find(b) == sparseToDense.end()){
+                sparseToDense[b] = mapperIdxPtr;
+                denseToSparse[mapperIdxPtr] = b;
+                mapperIdxPtr++;
+            }
+            edges.emplace_back(a, b);
+        } //skipping self loops
+    }
+    file.close();
+    cout<<"Done reading the file.."<<endl;
+    cout<<"Before deduplication: "<<edges.size()<<endl;
+    //deduplicating edges
+    sort(edges.begin(), edges.end());
+    auto last = unique(edges.begin(), edges.end());
+    edges.erase(last, edges.end());
+    cout<<"after deduplication: "<<edges.size()<<endl;
+    
+    for (auto& [a, b] : edges) {
+        // if(b >= numV){
+        //     cout<<"ERROR: there is a node "<<b<<" whose value is greater than the number of nodes in the graph"<<endl;
+        // }
+        int aIdx = sparseToDense[a];
+        int bIdx = sparseToDense[b];
+        degrees[aIdx]++;
+        degrees[bIdx]++;
+    }
+
+    cout<<"Done calculating the degreesfor each vertex.."<<endl;
+    sort(degreesToNodes.begin(), degreesToNodes.end(), [&degrees](int x, int y) {
+        return degrees[x] < degrees[y] || (degrees[x] == degrees[y] && x < y);
+    });
+
+    for(int i=0;i<numV;i++){
+        nodesToDegrees[degreesToNodes[i]] = i;
+    }
+
+    cout<<"Done creating both the mapping vectors.."<<endl;
+
+    vector<vector<int>> adjList(numV);
+    
+    map<int, int> cliqueSize; // map from clique size to count of that size
+
+    for(auto& [a, b]: edges){
+        int aIdx = sparseToDense[a];
+        int bIdx = sparseToDense[b];
+        adjList[nodesToDegrees[aIdx]].push_back(nodesToDegrees[bIdx]);
+        adjList[nodesToDegrees[bIdx]].push_back(nodesToDegrees[aIdx]);
+    }
+
+    for(auto& neighbours: adjList){
+        sort(neighbours.begin(), neighbours.end());
+    }
+
+    cout<<"Done creating the adjList.."<<endl;
+
+    cout<<"Starting the algorithm.."<<endl;
+
+    degrees.clear();
+    nodesToDegrees.clear();
+    sparseToDense.clear();
+
+    auto timeStart = high_resolution_clock::now();
+
+    update(1, numV, adjList, cliqueSize, degreesToNodes, denseToSparse);
+    
+    auto timeEnd = high_resolution_clock::now();
+
+    auto duration = duration_cast<seconds>(timeEnd - timeStart);
+
+    cout << "Time taken by update() = " << duration.count() << " s" << endl;
+
+    int totalCliques = 0;
+    long avgCliqueSize = 0;
+    for(auto& [size, count]: cliqueSize){
+        cout<<"Number of cliques of size "<<size<<" is "<<count<<endl;
+        totalCliques += count;
+        avgCliqueSize+= size*count;
+    }
+    cout<<"Total number of cliques is "<<totalCliques<<endl;
+    cout<<"Average clique size is "<<(double)avgCliqueSize/totalCliques<<endl;
+    cout<<"Maximum clique size is "<<cliqueSize.rbegin()->first<<endl;
+    return 0;
+}
+
+                </code></pre>
             </div>
         </div>
     </section>
