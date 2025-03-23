@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ['Bron-Kerbosch', 'Chiba Arboricity', 'ELS'],
+                labels: ['Tomita', 'Chiba Arboricity', 'Bron-Kerbosch with Degeneracy'],
                 datasets: [{
                     label: 'Runtime (s)',
                     data: runtimeData,
@@ -171,7 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('cliqueDistEnron')) {
         createCliqueChart(
             document.getElementById('cliqueDistEnron').getContext('2d'),
-            'Enron Email Network - Clique Size Distribution (ELS)',
+            'Enron Email Network - Clique Size Distribution', // Removed (ELS)
             cliqueData.enron.labels,
             cliqueData.enron.data
         );
@@ -180,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('cliqueDistWiki')) {
         createCliqueChart(
             document.getElementById('cliqueDistWiki').getContext('2d'),
-            'Wikipedia Vote Network - Clique Size Distribution (ELS)',
+            'Wikipedia Vote Network - Clique Size Distribution', // Removed (ELS)
             cliqueData.wiki.labels,
             cliqueData.wiki.data
         );
@@ -189,7 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('cliqueDistSkitter')) {
         createCliqueChart(
             document.getElementById('cliqueDistSkitter').getContext('2d'),
-            'Skitter Network - Clique Size Distribution (ELS)',
+            'Skitter Network - Clique Size Distribution', // Removed (ELS)
             cliqueData.skitter.labels,
             cliqueData.skitter.data
         );

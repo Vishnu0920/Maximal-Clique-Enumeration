@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Algorithms</title>
+    <title>Maximal Clique Algorithms</title>
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
@@ -16,35 +16,96 @@
         <a href="report.html">Report</a>
     </nav>
     <header>
-        <h1>Algorithms</h1>
+        <h1>Maximal Clique Algorithms</h1>
     </header>
+    
     <section>
-        <h2>CLIQUE (Paper 1)</h2>
-        <p><strong>Key Idea</strong>: Enumerate maximal cliques using a backtracking approach.</p>
-        <pre><code>procedure CLIQUE(R, P, X):
-    if P and X are empty:
-        report R as a maximal clique
-    for each vertex v in P:
-        CLIQUE(R ∪ {v}, P ∩ N(v), X ∩ N(v))</code></pre>
-        <p><strong>Complexity</strong>: O(3^{n/3}) in the worst case.</p>
+        <h2>1) Tomita-Tanaka-Takahashi (TTT) Algorithm</h2>
+        <p>This algorithm improves upon Bron–Kerbosch by using degeneracy ordering and efficient pruning.</p>
+        <pre><code>Procedure CLIQUES(G)
+Input: Graph G with vertices V and edges E
+Output: All maximal cliques in G
+
+1. Compute degeneracy ordering of vertices: v1, v2, ..., vn
+2. Initialize Q = ∅  // Q holds the current clique
+3. Initialize SUBG = V  // Remaining vertices to explore
+4. Initialize FINI = ∅  // Vertices that are already processed
+
+5. Call EXPAND(Q, SUBG, FINI)
+
+Procedure EXPAND(Q, SUBG, FINI)
+Input:
+    Q - Current clique
+    SUBG - Set of vertices that can be added to Q
+    FINI - Vertices already considered to prevent duplicate cliques
+
+1. If SUBG is empty:
+    a. Report Q as a maximal clique
+    b. Return
+
+2. Select a pivot vertex u ∈ SUBG ∪ FINI that maximizes |SUBG ∩ Neighbors(u)|
+
+3. Define CAND = SUBG - Neighbors(u)  // Candidates excluding the pivot's neighbors
+
+4. For each vertex v in CAND:
+    a. New clique: Q' = Q ∪ {v}
+    b. New subgraph: SUBG' = SUBG ∩ Neighbors(v)
+    c. New finished set: FINI' = FINI ∩ Neighbors(v)
+    d. Recursively call EXPAND(Q', SUBG', FINI')
+    e. Move v from SUBG to FINI</code></pre>
+        <p><strong>Time Complexity:</strong> O(3^(n/3)) (worst-case time complexity).</p>
     </section>
+    
     <section>
-        <h2>Bron-Kerbosch Degeneracy (Paper 2)</h2>
-        <p><strong>Key Idea</strong>: Use vertex degeneracy ordering to reduce search space.</p>
-        <pre><code>procedure BronKerboschDegeneracy(V, E):
-    R ← ∅, P ← V, X ← ∅
-    for each v in V ordered by degeneracy:
-        BronKerbosch(R ∪ {v}, P ∩ N(v), X ∩ N(v))</code></pre>
-        <p><strong>Complexity</strong>: O(d * n * 3^{d/3}), where d is the degeneracy.</p>
+        <h2>2) Bron–Kerbosch Algorithm with Degeneracy Ordering</h2>
+        <p>This variant improves performance by leveraging degeneracy ordering of the graph.</p>
+        <pre><code>Procedure BronKerboschDegeneracy(V, E)
+Input: Graph G = (V, E)
+Output: All maximal cliques
+
+1. Compute a degeneracy ordering of the vertices: v0, v1, ..., vn-1
+2. For each vertex vi in this order:
+       a. Define P = {neighbors of vi that appear later in the ordering}
+       b. Define X = {neighbors of vi that appear earlier in the ordering}
+       c. Call BronKerboschPivot(P, {vi}, X)</code></pre>
+        <p><strong>Time Complexity:</strong> O(d⋅n^(3d/3)), where d is the degeneracy of the graph.</p>
     </section>
+    
     <section>
-        <h2>Arboricity-based (Paper 3)</h2>
-        <p><strong>Key Idea</strong>: Use arboricity to bound the number of cliques.</p>
-        <pre><code>procedure ArboricityClique(G):
-    for each subgraph H in G:
-        if H is a clique:
-            report H</code></pre>
-        <p><strong>Complexity</strong>: O(m * α), where α is the arboricity.</p>
+        <h2>2a) Bron–Kerbosch Algorithm with Pivoting</h2>
+        <p>An optimized version that reduces the number of recursive calls.</p>
+        <pre><code>Procedure BronKerboschPivot(P, R, X)
+Input: 
+    P - Set of potential candidates to be added to the clique
+    R - Current clique being built
+    X - Set of vertices already considered
+Output:
+    All maximal cliques
+
+1. If P and X are both empty:
+       Report R as a maximal clique
+       Return
+
+2. Choose a pivot u from P ∪ X that maximizes |P ∩ Neighbors(u)|
+
+3. For each vertex v in P \ Neighbors(u):
+       a. Call BronKerboschPivot(P ∩ Neighbors(v), R ∪ {v}, X ∩ Neighbors(v))
+       b. Remove v from P
+       c. Add v to X</code></pre>
+        <p><strong>Time Complexity:</strong> O(3^(n/3)) (optimal worst-case complexity).</p>
+    </section>
+    
+    <section>
+        <h2>3) Chiba Arboricity-Based Algorithm</h2>
+        <p>This algorithm uses arboricity to efficiently enumerate maximal cliques.</p>
+        <pre><code>Procedure ArboricityClique(G)
+Input: Graph G with vertices V and edges E
+Output: All maximal cliques
+
+1. Compute an edge decomposition of G into forests
+2. Process each forest to enumerate cliques efficiently
+3. Report all maximal cliques found</code></pre>
+        <p><strong>Complexity:</strong> O(a(G)⋅n), where a(G) is the arboricity of the graph.</p>
     </section>
 </body>
 </html>
