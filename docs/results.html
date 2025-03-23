@@ -6,6 +6,7 @@
     <title>Results</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
 </head>
 <body>
     <nav>
@@ -19,42 +20,81 @@
     <header>
         <h1>Results</h1>
     </header>
+    
     <section>
         <h2>Summary</h2>
-        <p>This project implements and compares three maximal clique enumeration algorithms on large-scale real-world networks. Our key findings include:</p>
+        <p>This project implements and compares multiple maximal clique enumeration algorithms on large-scale real-world networks. Our key findings include:</p>
         <ul>
-            <li>Bron-Kerbosch Degeneracy showed the best overall performance</li>
-            <li>Arboricity-based approach had lowest memory consumption</li>
-            <li>CLIQUE algorithm struggled with large diameter networks</li>
+            <li>Bron-Kerbosch Degeneracy showed the best overall performance.</li>
+            <li>Arboricity-based approach had the lowest memory consumption.</li>
+            <li>CLIQUE algorithm struggled with large-diameter networks.</li>
+            <li>ELS Algorithm showed efficient clique enumeration with moderate runtime.</li>
         </ul>
     </section>
 
     <section>
-        <h2>Runtime Comparison (milliseconds)</h2>
+        <h2>Chiba Arboricity Algorithm Results</h2>
+        <p>The following results are from running the Chiba Arboricity Algorithm on three datasets:</p>
+
+        <h3>Wikipedia Votes</h3>
+        <ul>
+            <li><b>Time:</b> 781s</li>
+            <li><b>Total number of cliques:</b> 459,002</li>
+            <li><b>Average clique size:</b> 7.32</li>
+            <li><b>Maximum clique size:</b> 17</li>
+        </ul>
+
+        <h3>Enron Emails</h3>
+        <ul>
+            <li><b>Time:</b> 1798s</li>
+            <li><b>Total number of cliques:</b> 226,859</li>
+            <li><b>Average clique size:</b> 8.08</li>
+            <li><b>Maximum clique size:</b> 20</li>
+        </ul>
+
+        <h3>Skitter Network</h3>
+        <p>Chiba Arboricity algorithm did not run successfully on this dataset.</p>
+    </section>
+
+    <section>
+        <h2>ELS Algorithm Results</h2>
+        <p>The following results are from running the ELS Algorithm on three datasets:</p>
+
+        <h3>Wikipedia Votes</h3>
+        <ul>
+            <li><b>Time:</b> 914ms</li>
+            <li><b>Total number of cliques:</b> 459,002</li>
+            <li><b>Average clique size:</b> 7.32</li>
+            <li><b>Maximum clique size:</b> 17</li>
+        </ul>
+
+        <h3>Enron Emails</h3>
+        <ul>
+            <li><b>Time:</b> 694ms</li>
+            <li><b>Total number of cliques:</b> 226,859</li>
+            <li><b>Average clique size:</b> 8.08</li>
+            <li><b>Maximum clique size:</b> 20</li>
+        </ul>
+
+        <h3>Skitter Network</h3>
+        <ul>
+            <li><b>Time:</b> 150.37s</li>
+            <li><b>Total number of cliques:</b> 37,322,355</li>
+            <li><b>Maximum clique size:</b> 67</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>Runtime Comparison (seconds)</h2>
         <div class="charts-container">
-            <div class="chart-card">
-                <canvas id="runtimeAS"></canvas>
-            </div>
             <div class="chart-card">
                 <canvas id="runtimeWiki"></canvas>
             </div>
             <div class="chart-card">
                 <canvas id="runtimeEnron"></canvas>
             </div>
-        </div>
-    </section>
-
-    <section>
-        <h2>Memory Usage (megabytes)</h2>
-        <div class="charts-container">
             <div class="chart-card">
-                <canvas id="memoryAS"></canvas>
-            </div>
-            <div class="chart-card">
-                <canvas id="memoryWiki"></canvas>
-            </div>
-            <div class="chart-card">
-                <canvas id="memoryEnron"></canvas>
+                <canvas id="runtimeSkitter"></canvas>
             </div>
         </div>
     </section>

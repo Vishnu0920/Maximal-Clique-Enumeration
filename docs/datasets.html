@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Datasets</title>
     <link rel="stylesheet" href="assets/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <nav>
@@ -18,6 +19,7 @@
     <header>
         <h1>Datasets</h1>
     </header>
+
     <section>
         <h2>Dataset Overview</h2>
         <p>We used the following real-world network datasets to test the algorithms:</p>
@@ -36,6 +38,7 @@
             <a href="https://snap.stanford.edu/data/as-Skitter.html" class="view-link" target="_blank">
                 View Dataset
             </a>
+            <canvas id="cliqueDistSkitter"></canvas>
         </div>
 
         <div class="dataset-card">
@@ -52,6 +55,7 @@
             <a href="https://snap.stanford.edu/data/wiki-Vote.html" class="view-link" target="_blank">
                 View Dataset
             </a>
+            <canvas id="cliqueDistWiki"></canvas>
         </div>
 
         <div class="dataset-card">
@@ -68,7 +72,10 @@
             <a href="https://snap.stanford.edu/data/email-Enron.html" class="view-link" target="_blank">
                 View Dataset
             </a>
+            <canvas id="cliqueDistEnron"></canvas>
         </div>
     </section>
+
+    <script src="assets/js/script.js"></script>
 </body>
 </html>
