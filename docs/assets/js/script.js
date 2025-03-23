@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ['Tomita', 'Chiba Arboricity', 'Bron-Kerbosch with Degeneracy'],
+                labels: ['Tomita', 'Chiba Arboricity', 'Bron-Kerbosch Degeneracy'],
                 datasets: [{
                     label: 'Runtime (s)',
                     data: runtimeData,
@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
         createRuntimeChart(
             document.getElementById('runtimeWiki').getContext('2d'),
             'Wikipedia Votes Runtime',
-            [null, 781, 0.914] // ELS runtime in seconds
+            [2.71976, 781, 0.914] // Tomita, Chiba Arboricity, Bron-Kerbosch Degeneracy
         );
     }
 
@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
         createRuntimeChart(
             document.getElementById('runtimeEnron').getContext('2d'),
             'Enron Emails Runtime',
-            [null, 1798, 0.694] // ELS runtime in seconds
+            [2.19143, 1798, 0.694] // Tomita, Chiba Arboricity, Bron-Kerbosch Degeneracy
         );
     }
 
@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
         createRuntimeChart(
             document.getElementById('runtimeSkitter').getContext('2d'),
             'Skitter Network Runtime',
-            [null, null, 150.374] // ELS runtime in seconds
+            [527.041, null, 150.374] // Tomita, Chiba Arboricity (unknown), Bron-Kerbosch Degeneracy
         );
     }
 
@@ -171,7 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('cliqueDistEnron')) {
         createCliqueChart(
             document.getElementById('cliqueDistEnron').getContext('2d'),
-            'Enron Email Network - Clique Size Distribution', // Removed (ELS)
+            'Enron Email Network - Clique Size Distribution',
             cliqueData.enron.labels,
             cliqueData.enron.data
         );
@@ -180,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('cliqueDistWiki')) {
         createCliqueChart(
             document.getElementById('cliqueDistWiki').getContext('2d'),
-            'Wikipedia Vote Network - Clique Size Distribution', // Removed (ELS)
+            'Wikipedia Vote Network - Clique Size Distribution',
             cliqueData.wiki.labels,
             cliqueData.wiki.data
         );
@@ -189,7 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('cliqueDistSkitter')) {
         createCliqueChart(
             document.getElementById('cliqueDistSkitter').getContext('2d'),
-            'Skitter Network - Clique Size Distribution', // Removed (ELS)
+            'Skitter Network - Clique Size Distribution',
             cliqueData.skitter.labels,
             cliqueData.skitter.data
         );
