@@ -77,14 +77,14 @@
             
             <div id="tab1" class="tab-content active">
                 <pre><code>// CLIQUE Algorithm Implementation
-#include <iostream>
-#include <vector>
-#include <list>
-#include <fstream>
-#include <sstream>
-#include <unordered_set>
-#include <set>
-#include <chrono>
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;list&gt;
+#include &lt;fstream&gt;
+#include &lt;sstream&gt;
+#include &lt;unordered_set&gt;
+#include &lt;set&gt;
+#include &lt;chrono&gt;
 using namespace std;
 
 
@@ -93,18 +93,18 @@ long long max_size = 0;
 
 
 void expand(
-    vector<int>& R, 
-    unordered_set<int> &subgraph, 
-    unordered_set<int> &cand, 
-    unordered_map<int, set<int>> &adj_list, 
-    unordered_map<int, int>& clique_size_counts) {
+    vector&lt;int&gt;& R, 
+    unordered_set&lt;int&gt; &subgraph, 
+    unordered_set&lt;int&gt; &cand, 
+    unordered_map&lt;int, set&lt;int&gt;&gt; &adj_list, 
+    unordered_map&lt;int, int&gt;& clique_size_counts) {
 
     if (subgraph.empty()) {
         clique_size_counts[R.size()]++;
         max_size = max(max_size, (long long)R.size());
         clique_counter++;
         if (clique_counter % 10000 == 0) {
-            cout << "Found " << clique_counter << " cliques so far..." << endl;
+            cout &lt;&lt; "Found " &lt;&lt; clique_counter &lt;&lt; " cliques so far..." &lt;&lt; endl;
 
          }
 
@@ -118,7 +118,7 @@ void expand(
     for(auto ix: subgraph){
 
         int count = 0;
-        if(adj_list[ix].size() < cand.size()){
+        if(adj_list[ix].size() &lt; cand.size()){
             for(auto x: adj_list[ix]){
                 if (cand.count(x) != 0){
                     count++;
@@ -133,7 +133,7 @@ void expand(
             }
         }
 
-        if(count > max_neighbors){
+        if(count &gt; max_neighbors){
             max_neighbors = count;
             pivot = ix;
         }
@@ -143,8 +143,8 @@ void expand(
 
     while(i != cand.end()){
 
-        unordered_set<int> new_subgraph;
-        unordered_set<int> new_cand;
+        unordered_set&lt;int&gt; new_subgraph;
+        unordered_set&lt;int&gt; new_cand;
 
         int v = *i;
         if (adj_list.at(pivot).count(v)) {
@@ -152,7 +152,7 @@ void expand(
             continue;
         }
 
-        if(cand.size() < adj_list[v].size()){
+        if(cand.size() &lt; adj_list[v].size()){
             for(auto it: cand){
                 if(adj_list.at(v).count(it)){
                     new_cand.insert(it);
@@ -166,7 +166,7 @@ void expand(
             }
         }
         
-        if (subgraph.size() < adj_list[v].size()) {
+        if (subgraph.size() &lt; adj_list[v].size()) {
             for (auto y: subgraph) {
                 if (adj_list.at(v).count(y) != 0) new_subgraph.insert(y);
             }
@@ -188,17 +188,17 @@ void expand(
 
 
 int main(int argc, char* argv[]) {
-    if (argc < 2) {
-        cerr << "Usage: " << argv[0] << " <filename>" << endl;
+    if (argc &lt; 2) {
+        cerr &lt;&lt; "Usage: " &lt;&lt; argv[0] &lt;&lt; " &lt;filename&gt;" &lt;&lt; endl;
         return 1;
     }
     
     string filename = argv[1];
-    cout<<"Finding cliques in the testset graph in: "<<filename<<endl;
+    cout&lt;&lt;"Finding cliques in the testset graph in: "&lt;&lt;filename&lt;&lt;endl;
     
     ifstream file(filename);
     string line;
-    unordered_map<int, set<int>> adj_list;
+    unordered_map&lt;int, set&lt;int&gt;&gt; adj_list;
 
     auto start_time = chrono::high_resolution_clock::now();
 
@@ -207,7 +207,7 @@ int main(int argc, char* argv[]) {
     if (line[0] != '#') {
         istringstream iss(line);
         int source, target;
-        if (iss >> source >> target && source != target) {
+        if (iss &gt;&gt; source &gt;&gt; target && source != target) {
             adj_list[source].insert(target);
             adj_list[target].insert(source);
         }
@@ -218,40 +218,40 @@ int main(int argc, char* argv[]) {
         
         istringstream iss(line);
         int source, target;
-        if (iss >> source >> target && source != target) {
+        if (iss &gt;&gt; source &gt;&gt; target && source != target) {
             adj_list[source].insert(target);
             adj_list[target].insert(source);
         }
     }
 
-    unordered_set<int> sub_graph;
-    unordered_set<int> candidates;
-    unordered_map<int, int> clique_size_counts;
+    unordered_set&lt;int&gt; sub_graph;
+    unordered_set&lt;int&gt; candidates;
+    unordered_map&lt;int, int&gt; clique_size_counts;
 
     for (const auto &[x, _] : adj_list) {
         candidates.insert(x);
         sub_graph.insert(x);
     }
 
-    vector<int> R;
+    vector&lt;int&gt; R;
     
     expand(R, sub_graph, candidates, adj_list, clique_size_counts);
 
     auto end_time = chrono::high_resolution_clock::now();
-    chrono::duration<double> duration = end_time - start_time;
-    cout << "Number of cliques: " << clique_counter << endl;
-    cout << "Maximum clique size: " << max_size << endl;
+    chrono::duration&lt;double&gt; duration = end_time - start_time;
+    cout &lt;&lt; "Number of cliques: " &lt;&lt; clique_counter &lt;&lt; endl;
+    cout &lt;&lt; "Maximum clique size: " &lt;&lt; max_size &lt;&lt; endl;
 
-    cout << "\nClique size distribution:" << endl;
-    cout << "Size\tCount" << endl;
-    cout << "----------------" << endl;
+    cout &lt;&lt; "\nClique size distribution:" &lt;&lt; endl;
+    cout &lt;&lt; "Size\tCount" &lt;&lt; endl;
+    cout &lt;&lt; "----------------" &lt;&lt; endl;
     int total_cliques = 0;
     for (const auto& [size, count] : clique_size_counts) {
-        cout << size << "\t" << count << endl;
+        cout &lt;&lt; size &lt;&lt; "\t" &lt;&lt; count &lt;&lt; endl;
         total_cliques += count;
     }
 
-    cout << "Execution Time: " << duration.count() << " seconds" << endl;
+    cout &lt;&lt; "Execution Time: " &lt;&lt; duration.count() &lt;&lt; " seconds" &lt;&lt; endl;
 
     return 0;
 
@@ -529,38 +529,40 @@ int main(int argc, char* argv[]) {
             <div id="tab3" class="tab-content">
                 <pre><code>
                     
-#include <iostream>
-#include <fstream>
+
+                    
+#include &lt;iostream&gt;
+#include &lt;fstream&gt;
 //#include "stdc++.h"
-#include <chrono>
-#include <bits/stdc++.h>
+#include &lt;chrono&gt;
+#include &lt;bits/stdc++.h&gt;
 using namespace std;
 using namespace std::chrono;
 
 struct Frame {
     int idx;
     int step; // 0: initial, 1: after first subcall, 2: after second subcall
-    unique_ptr<set<int>> CminusNidx;
-    unique_ptr<set<int>> CintersectNidx;
+    unique_ptr&lt;set&lt;int&gt;&gt; CminusNidx;
+    unique_ptr&lt;set&lt;int&gt;&gt; CintersectNidx;
     
     Frame(int i, int step) :
     idx(i),
     step(step),
-    CminusNidx(make_unique<set<int>>()),
-    CintersectNidx(make_unique<set<int>>()) {}
+    CminusNidx(make_unique&lt;set&lt;int&gt;&gt;()),
+    CintersectNidx(make_unique&lt;set&lt;int&gt;&gt;()) {}
 };
 
-void update(int initialIdx, int numV, vector<vector<int>> &adjList, map<int, int> &cliqueSize, vector<int> &degreesToNodes, vector<int> &denseToSparse){
-    vector<int> T(numV, 0);
-    vector<int> S(numV, 0); // acc the algo
-    vector<bool> CFlag(numV,false); // the clique vector that has a boolean flag for each vertex
-    vector<int> C; //since the expected max clique size is less than 50 we can use a vector to store all the vertices in the clique
+void update(int initialIdx, int numV, vector&lt;vector&lt;int&gt;&gt; &adjList, map&lt;int, int&gt; &cliqueSize, vector&lt;int&gt; &degreesToNodes, vector&lt;int&gt; &denseToSparse){
+    vector&lt;int&gt; T(numV, 0);
+    vector&lt;int&gt; S(numV, 0); // acc the algo
+    vector&lt;bool&gt; CFlag(numV,false); // the clique vector that has a boolean flag for each vertex
+    vector&lt;int&gt; C; //since the expected max clique size is less than 50 we can use a vector to store all the vertices in the clique
     
     CFlag[0] = true;
     C.push_back(0);
     
     int TotalCliques = 0;
-    stack<Frame> stack;
+    stack&lt;Frame&gt; stack;
     stack.emplace(initialIdx, 0);
 
     while(!stack.empty()){
@@ -570,36 +572,36 @@ void update(int initialIdx, int numV, vector<vector<int>> &adjList, map<int, int
         //int step = current.step;
 
         if(idx == numV){
-            // cout<<"Clique found: ";
+            // cout&lt;&lt;"Clique found: ";
             // //cuz idx starts from 0
             // for(auto &v: C){
-            //     cout<<denseToSparse[degreesToNodes[v]]<<" ";
+            //     cout&lt;&lt;denseToSparse[degreesToNodes[v]]&lt;&lt;" ";
             // }
-            // cout<<endl;
+            // cout&lt;&lt;endl;
             TotalCliques++;
             if(TotalCliques%5000 == 0){
-                cout<<"Clique "<<TotalCliques<<" found"<<endl;
+                cout&lt;&lt;"Clique "&lt;&lt;TotalCliques&lt;&lt;" found"&lt;&lt;endl;
             }
             cliqueSize[(int)C.size()]++;
             continue;
         }
 
         if(current.step == 0){
-            auto CminusNidx = make_unique<set<int>>();
-            auto CintersectNidx = make_unique<set<int>>();
+            auto CminusNidx = make_unique&lt;set&lt;int&gt;&gt;();
+            auto CintersectNidx = make_unique&lt;set&lt;int&gt;&gt;();
             for(int v: C){
                 if(binary_search(adjList[idx].begin(), adjList[idx].end(), v)){
-                    CintersectNidx->insert(v);
+                    CintersectNidx-&gt;insert(v);
                 }
                 else{
-                    CminusNidx->insert(v);
+                    CminusNidx-&gt;insert(v);
                 }
             }
             
             current.CminusNidx = std::move(CminusNidx);
             current.CintersectNidx = std::move(CintersectNidx);
                 
-            if (!current.CminusNidx->empty()) {
+            if (!current.CminusNidx-&gt;empty()) {
                 current.step = 1;
                 stack.push(std::move(current));
                 stack.emplace(idx + 1, 0); // Subcall A
@@ -610,9 +612,9 @@ void update(int initialIdx, int numV, vector<vector<int>> &adjList, map<int, int
         }
         if(current.step == 1){
             //computing T and S using the saved CminusNidx and CintersectNidx
-            set<int>& CminusNidx = *current.CminusNidx; //on dereferencing, we get a set<int>.
-            //doesnt violate the unique ptr thing because CminusNidx is a reference to the set<int> object not another pointer to it.
-            set<int>& CintersectNidx = *current.CintersectNidx;
+            set&lt;int&gt;& CminusNidx = *current.CminusNidx; //on dereferencing, we get a set&lt;int&gt;.
+            //doesnt violate the unique ptr thing because CminusNidx is a reference to the set&lt;int&gt; object not another pointer to it.
+            set&lt;int&gt;& CintersectNidx = *current.CintersectNidx;
             int CintersectNidxSize = (int)CintersectNidx.size();
             int CminusNidxSize = (int)CminusNidx.size();
             //computing T[y]
@@ -627,7 +629,7 @@ void update(int initialIdx, int numV, vector<vector<int>> &adjList, map<int, int
             //computing S[y]
             for(int x: CminusNidx){
                 for(int y: adjList[x]){
-                    if((!CFlag[y])){ // do we not have the  && y != idx condition here? --> no
+                    if((!CFlag[y])){ // do we not have the  && y != idx condition here? --&gt; no
                         S[y]++;
                     }
                 }
@@ -636,7 +638,7 @@ void update(int initialIdx, int numV, vector<vector<int>> &adjList, map<int, int
             bool FLAG = true;
             //maximality test
             for(int v: adjList[idx]){
-                if((!CFlag[v]) && v<idx && T[v]== CintersectNidxSize){
+                if((!CFlag[v]) && v&lt;idx && T[v]== CintersectNidxSize){
                     FLAG = false; //{(C intersect N(i))U{i} is not a clique of Gi
                     break;
                 }
@@ -646,7 +648,7 @@ void update(int initialIdx, int numV, vector<vector<int>> &adjList, map<int, int
             // note that CintersectNidx corresponds to Co in lemma 6 in the algo
             // the set CminusNidx is sorted in increasing order so its already sorted.
             
-            //case when S(y) >= 1
+            //case when S(y) &gt;= 1
             int iterationNum = 0; // in the algo it is iteration num from 1 to p where p is the size of CminusNidx
             //bool firstVertFlag = true;
             int k_minus1 = 0;
@@ -656,13 +658,13 @@ void update(int initialIdx, int numV, vector<vector<int>> &adjList, map<int, int
                     break; // if the flag was already set to false due to earlier tests then break and dont waste time with this test
                 }
                 for(int y: adjList[k]){
-                    if((!CFlag[y]) && y<idx && T[y] == CintersectNidxSize){
+                    if((!CFlag[y]) && y&lt;idx && T[y] == CintersectNidxSize){
                         //now we have the respective y values
-                        if(y >= k){
+                        if(y &gt;= k){
                             S[y]--;
                         }
-                        else if((S[y]+iterationNum == CminusNidxSize) && y>=k_minus1 && y<k){
-                            //if k is the first vertex to satisfy y<k
+                        else if((S[y]+iterationNum == CminusNidxSize) && y&gt;=k_minus1 && y&lt;k){
+                            //if k is the first vertex to satisfy y&lt;k
                             //S[y] = S(y);
                             FLAG = false;
                             break;
@@ -678,16 +680,16 @@ void update(int initialIdx, int numV, vector<vector<int>> &adjList, map<int, int
             }
             //case when S(y) = 0
             if(CintersectNidxSize != 0 && FLAG){
-                for(int y=0;y<idx;y++){
+                for(int y=0;y&lt;idx;y++){
                     if((!CFlag[y]) && T[y] == CintersectNidxSize && S[y] == 0){
-                        if( CminusNidxSize == 0 || lastVert < y){
+                        if( CminusNidxSize == 0 || lastVert &lt; y){
                             FLAG = false;
                             break;
                         }
                     }
                 }
             }
-            else if(CminusNidxSize == 0 || lastVert < idx -1){ // check if -1 is required since we start from 0 not 1
+            else if(CminusNidxSize == 0 || lastVert &lt; idx -1){ // check if -1 is required since we start from 0 not 1
                 FLAG = false;
             }
             
@@ -732,8 +734,8 @@ void update(int initialIdx, int numV, vector<vector<int>> &adjList, map<int, int
             }
         }
         if(current.step==2){
-            set<int>& CminusNidx = *current.CminusNidx;
-            //set<int>& CintersectNidx = *current.CintersectNidx;
+            set&lt;int&gt;& CminusNidx = *current.CminusNidx;
+            //set&lt;int&gt;& CintersectNidx = *current.CintersectNidx;
             //restoring C back.
             if (CFlag[idx]) {
                 CFlag[idx] = false;
@@ -754,13 +756,13 @@ void update(int initialIdx, int numV, vector<vector<int>> &adjList, map<int, int
 
 
 int main(int argc, char* argv[]) {
-    if (argc < 2) {
-        cerr << "Usage: " << argv[0] << " <filename>" << endl;
+    if (argc &lt; 2) {
+        cerr &lt;&lt; "Usage: " &lt;&lt; argv[0] &lt;&lt; " &lt;filename&gt;" &lt;&lt; endl;
         return 1;
     }
     
     string filename = argv[1];
-    cout<<"Finding cliques in the testset graph in: "<<filename<<endl;
+    cout&lt;&lt;"Finding cliques in the testset graph in: "&lt;&lt;filename&lt;&lt;endl;
     ifstream file(filename);
     string line;
 
@@ -772,32 +774,32 @@ int main(int argc, char* argv[]) {
 
     int numV, numE;
     sscanf(line.c_str(), "# Nodes: %d Edges: %d", &numV, &numE);
-    cout<<"Number of vertices: "<<numV<<endl;
-    cout<<"Number of edges: "<<numE<<endl;
+    cout&lt;&lt;"Number of vertices: "&lt;&lt;numV&lt;&lt;endl;
+    cout&lt;&lt;"Number of edges: "&lt;&lt;numE&lt;&lt;endl;
 
     getline(file, line); // skip the line "# FromNodeId    ToNodeId"
 
     
     // read edges and store as undirected sorted pairs.
-    vector<pair<int, int>> edges;
+    vector&lt;pair&lt;int, int&gt;&gt; edges;
     // now, the vertices can be sparse. Therefore we first need to map it down.
-    vector<int> denseToSparse(numV);
-    unordered_map<int,int> sparseToDense;
+    vector&lt;int&gt; denseToSparse(numV);
+    unordered_map&lt;int,int&gt; sparseToDense;
     sparseToDense.reserve(numV);
     int mapperIdxPtr = 0;
 
-    vector<int> degrees(numV, 0); //includes nodes of degree 0
-    vector<int> degreesToNodes; // this will then be sorted in order of degrees; ie degreesSortedNodes
-    vector<int> nodesToDegrees(numV, 0);
+    vector&lt;int&gt; degrees(numV, 0); //includes nodes of degree 0
+    vector&lt;int&gt; degreesToNodes; // this will then be sorted in order of degrees; ie degreesSortedNodes
+    vector&lt;int&gt; nodesToDegrees(numV, 0);
     // this degrees sorted nodes is the order in which we will be traversing the nodes in the algo.
 
-    for(int i=0;i<numV;i++){
+    for(int i=0;i&lt;numV;i++){
         degreesToNodes.push_back(i);
     }
 
     int from, to;
 
-    while (file >> from >> to) {
+    while (file &gt;&gt; from &gt;&gt; to) {
         if (from != to){
             int a = min(from, to);
             int b = max(from, to);
@@ -815,17 +817,17 @@ int main(int argc, char* argv[]) {
         } //skipping self loops
     }
     file.close();
-    cout<<"Done reading the file.."<<endl;
-    cout<<"Before deduplication: "<<edges.size()<<endl;
+    cout&lt;&lt;"Done reading the file.."&lt;&lt;endl;
+    cout&lt;&lt;"Before deduplication: "&lt;&lt;edges.size()&lt;&lt;endl;
     //deduplicating edges
     sort(edges.begin(), edges.end());
     auto last = unique(edges.begin(), edges.end());
     edges.erase(last, edges.end());
-    cout<<"after deduplication: "<<edges.size()<<endl;
+    cout&lt;&lt;"after deduplication: "&lt;&lt;edges.size()&lt;&lt;endl;
     
     for (auto& [a, b] : edges) {
-        // if(b >= numV){
-        //     cout<<"ERROR: there is a node "<<b<<" whose value is greater than the number of nodes in the graph"<<endl;
+        // if(b &gt;= numV){
+        //     cout&lt;&lt;"ERROR: there is a node "&lt;&lt;b&lt;&lt;" whose value is greater than the number of nodes in the graph"&lt;&lt;endl;
         // }
         int aIdx = sparseToDense[a];
         int bIdx = sparseToDense[b];
@@ -833,20 +835,20 @@ int main(int argc, char* argv[]) {
         degrees[bIdx]++;
     }
 
-    cout<<"Done calculating the degreesfor each vertex.."<<endl;
+    cout&lt;&lt;"Done calculating the degreesfor each vertex.."&lt;&lt;endl;
     sort(degreesToNodes.begin(), degreesToNodes.end(), [&degrees](int x, int y) {
-        return degrees[x] < degrees[y] || (degrees[x] == degrees[y] && x < y);
+        return degrees[x] &lt; degrees[y] || (degrees[x] == degrees[y] && x &lt; y);
     });
 
-    for(int i=0;i<numV;i++){
+    for(int i=0;i&lt;numV;i++){
         nodesToDegrees[degreesToNodes[i]] = i;
     }
 
-    cout<<"Done creating both the mapping vectors.."<<endl;
+    cout&lt;&lt;"Done creating both the mapping vectors.."&lt;&lt;endl;
 
-    vector<vector<int>> adjList(numV);
+    vector&lt;vector&lt;int&gt;&gt; adjList(numV);
     
-    map<int, int> cliqueSize; // map from clique size to count of that size
+    map&lt;int, int&gt; cliqueSize; // map from clique size to count of that size
 
     for(auto& [a, b]: edges){
         int aIdx = sparseToDense[a];
@@ -859,9 +861,9 @@ int main(int argc, char* argv[]) {
         sort(neighbours.begin(), neighbours.end());
     }
 
-    cout<<"Done creating the adjList.."<<endl;
+    cout&lt;&lt;"Done creating the adjList.."&lt;&lt;endl;
 
-    cout<<"Starting the algorithm.."<<endl;
+    cout&lt;&lt;"Starting the algorithm.."&lt;&lt;endl;
 
     degrees.clear();
     nodesToDegrees.clear();
@@ -873,20 +875,20 @@ int main(int argc, char* argv[]) {
     
     auto timeEnd = high_resolution_clock::now();
 
-    auto duration = duration_cast<seconds>(timeEnd - timeStart);
+    auto duration = duration_cast&lt;seconds&gt;(timeEnd - timeStart);
 
-    cout << "Time taken by update() = " << duration.count() << " s" << endl;
+    cout &lt;&lt; "Time taken by update() = " &lt;&lt; duration.count() &lt;&lt; " s" &lt;&lt; endl;
 
     int totalCliques = 0;
     long avgCliqueSize = 0;
     for(auto& [size, count]: cliqueSize){
-        cout<<"Number of cliques of size "<<size<<" is "<<count<<endl;
+        cout&lt;&lt;"Number of cliques of size "&lt;&lt;size&lt;&lt;" is "&lt;&lt;count&lt;&lt;endl;
         totalCliques += count;
         avgCliqueSize+= size*count;
     }
-    cout<<"Total number of cliques is "<<totalCliques<<endl;
-    cout<<"Average clique size is "<<(double)avgCliqueSize/totalCliques<<endl;
-    cout<<"Maximum clique size is "<<cliqueSize.rbegin()->first<<endl;
+    cout&lt;&lt;"Total number of cliques is "&lt;&lt;totalCliques&lt;&lt;endl;
+    cout&lt;&lt;"Average clique size is "&lt;&lt;(double)avgCliqueSize/totalCliques&lt;&lt;endl;
+    cout&lt;&lt;"Maximum clique size is "&lt;&lt;cliqueSize.rbegin()-&gt;first&lt;&lt;endl;
     return 0;
 }
 
